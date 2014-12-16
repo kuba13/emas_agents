@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import agent.Agent;
+import agent.AgentFactory;
 import exceptions.WrongGenotypeException;
 import fitness_evaluator.SimpleFunctionFitnessProxy;
 import function.ExampleFunction;
@@ -16,18 +17,19 @@ public class Main {
 	public static void main(String[] args) {
 		List<Agent> list = new ArrayList<Agent>();
 
-		Agent.setEnergyOnStart(300);
-		Agent.setEnergyLossFactor(40);
+		
 		
 		SimpleFunctionFitnessProxy proxy = new SimpleFunctionFitnessProxy(new ExampleFunction());
+		AgentFactory factory = new AgentFactory(50, 0.01, 300, proxy);
 		
 		for(int i=0; i<10; i++){
-			try {
-				list.add(new Agent(proxy));
-			} catch (WrongGenotypeException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				try {
+					list.add(factory.createAgent());
+				} catch (WrongGenotypeException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
 		}
 		
 		Random r = new Random();
@@ -44,6 +46,7 @@ public class Main {
 					System.out.println("Agent:"+e.toString()+" Fitness: "+e.getFitness()+" Energy: "+e.getEnergy());
 				}
 			}
+			size = list.size();
 			int k = r.nextInt(size-1);
 			int l = r.nextInt(size-1);
 			while(k==l){

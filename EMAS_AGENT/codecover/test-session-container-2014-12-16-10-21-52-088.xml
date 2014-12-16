@@ -1,0 +1,2042 @@
+<?xml version="1.0" encoding="UTF-8"?><TestSessionContainer xmlns="http://www.codecover.org/xml/testsession-container" Date="1418721712058" TestSessionContainerId="55269d4d-d5e2-43a7-83b9-ff1a8cbb75b8" version="1.0">
+<SrcFileList>
+<SrcFile Content="package tests;&#13;&#10;&#13;&#10;import static org.junit.Assert.*;&#13;&#10;&#13;&#10;import org.easymock.*;&#13;&#10;import org.junit.After;&#13;&#10;import org.junit.Before;&#13;&#10;import org.junit.Test;&#13;&#10;&#13;&#10;import exceptions.WrongGenotypeException;&#13;&#10;import fitness_evaluator.SimpleFunctionFitnessProxy;&#13;&#10;import function.SimpleFunction;&#13;&#10;import genotype.FunctionGenotype;&#13;&#10;import genotype.Genotype;&#13;&#10;&#13;&#10;public class SimpleFunctionProxyTest {&#13;&#10;&#9;&#13;&#10;&#9;SimpleFunction f;&#13;&#10;&#9;SimpleFunctionFitnessProxy proxy;&#13;&#10;&#9;&#13;&#10;&#9;@Before&#13;&#10;&#9;public void setUp() throws Exception {&#13;&#10;&#9;&#9;f= new SimpleFunction();&#13;&#10;&#9;&#9;proxy = new SimpleFunctionFitnessProxy(f);&#13;&#10;&#9;}&#9;&#13;&#10;&#9;&#13;&#10;&#9;@Test (expected = WrongGenotypeException.class)&#13;&#10;&#9;public void evaluateFitnessThrowingExceptionTest() throws WrongGenotypeException {&#13;&#10;&#9;&#9;Genotype gen=null;&#13;&#10;&#9;&#9;proxy.evaluateFitness(gen);&#13;&#10;&#13;&#10;&#9;&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;@Test (expected = WrongGenotypeException.class)&#13;&#10;&#9;public void evaluateFitnessThrowingExceptionSecondTest() throws WrongGenotypeException {&#13;&#10;&#9;&#13;&#10;&#9;&#9;Genotype gen =  EasyMock.createMock(Genotype.class);&#9;&#13;&#10;&#9;&#9;EasyMock.replay(gen);&#13;&#10;&#9;&#9;proxy.evaluateFitness(gen);&#13;&#10;&#9;&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;&#13;&#10;&#9;&#13;&#10;&#9;@Test&#13;&#10;&#9;public void evaluateFitnesTest() throws WrongGenotypeException{&#13;&#10;&#9;&#9;FunctionGenotype gen = new FunctionGenotype(f);&#13;&#10;&#9;&#9;double[][] P = new double [2][1];&#13;&#10;&#9;    P[0][0]=0;&#13;&#10;&#9;&#9;P[1][0]=1;&#13;&#10;&#9;&#9;gen.setP(P);&#13;&#10;&#9;&#9;double fitness= proxy.evaluateFitness(gen);&#13;&#10;&#9;&#9;assert(fitness == 0.5);&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;}&#13;&#10;" Filename="SimpleFunctionProxyTest.java" Intrnl_Id="1"/>
+<SrcFile Content="package tests;&#13;&#10;&#13;&#10;import static org.junit.Assert.*;&#13;&#10;&#13;&#10;import org.junit.After;&#13;&#10;import org.junit.Before;&#13;&#10;import org.junit.Test;&#13;&#10;&#13;&#10;import function.IFunction;&#13;&#10;import function.SimpleFunction;&#13;&#10;import genotype.FunctionGenotype;&#13;&#10;import genotype.Genotype;&#13;&#10;&#13;&#10;public class FunctionGenotypeTest {&#13;&#10;&#9;private IFunction f;&#13;&#10;&#9;private FunctionGenotype gen;&#13;&#10;&#9;@Before&#13;&#10;&#9;public void setUp() throws Exception {&#13;&#10;&#9;&#9;f= new SimpleFunction();&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;@Test&#13;&#10;&#9;public void constructorTest() {&#13;&#10;&#9;&#9;gen = new FunctionGenotype(f);&#13;&#10;&#9;&#9;double[] maxDomain = gen.getMaxDomain();&#13;&#10;&#9;&#9;assert(maxDomain.length==1 &amp;&amp; maxDomain[0]==10);&#13;&#10;&#9;&#9;double[] minDomain = gen.getMinDomain();&#13;&#10;&#9;&#9;assert(minDomain.length==1 &amp;&amp; minDomain[0]==-10);&#13;&#10;&#9;&#9;assert(gen.getN()==1);&#13;&#10;&#9;&#9;assert(gen.getP().length==2);&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;@Test&#13;&#10;&#9;public void hybridizeZeroRandomnessTest(){&#13;&#10;&#9;&#9;gen = new FunctionGenotype(f);&#13;&#10;&#9;&#9;FunctionGenotype gen2 = new FunctionGenotype(f);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;double[][] P = new double [2][1];&#13;&#10;&#9;    P[0][0]=0;&#13;&#10;&#9;&#9;P[1][0]=1;&#13;&#10;&#9;&#9;gen.setP(P);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;double[][] P2 = new double [2][1];&#13;&#10;&#9;    P[0][0]=1;&#13;&#10;&#9;&#9;P[1][0]=0;&#13;&#10;&#9;&#9;gen2.setP(P2);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;FunctionGenotype gen3 = (FunctionGenotype) gen.hybridize(gen2, 0.0);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;assert(gen3.getP().length==2 &amp;&amp; gen3.getP()[0][0]==0.5 &amp;&amp; gen3.getP()[1][0]==0.5);&#13;&#10;&#9;&#9;&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;@Test&#13;&#10;&#9;public void hybridizeTest(){&#13;&#10;&#9;&#9;gen = new FunctionGenotype(f);&#13;&#10;&#9;&#9;FunctionGenotype gen2 = new FunctionGenotype(f);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;double[][] P = new double [2][1];&#13;&#10;&#9;    P[0][0]=0;&#13;&#10;&#9;&#9;P[1][0]=1;&#13;&#10;&#9;&#9;gen.setP(P);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;double[][] P2 = new double [2][1];&#13;&#10;&#9;    P[0][0]=1;&#13;&#10;&#9;&#9;P[1][0]=0;&#13;&#10;&#9;&#9;gen2.setP(P2);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;FunctionGenotype gen3 = (FunctionGenotype) gen.hybridize(gen2, 0.5);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;assert(gen3.getP().length==2 &amp;&amp; gen3.getP()[0][0]&lt;=10 &amp;&amp; gen3.getP()[0][0]&gt;=-10 &amp;&amp; gen3.getP()[1][0]&lt;=10 &amp;&amp; gen3.getP()[1][0]&gt;=-10);&#13;&#10;&#9;&#9;&#13;&#10;&#9;}&#13;&#10;}&#13;&#10;" Filename="FunctionGenotypeTest.java" Intrnl_Id="2"/>
+<SrcFile Content="package tests;&#13;&#10;&#13;&#10;import org.junit.runner.RunWith;&#13;&#10;import org.junit.runners.Suite;&#13;&#10;import org.junit.runners.Suite.SuiteClasses;&#13;&#10;&#13;&#10;@RunWith(Suite.class)&#13;&#10;@SuiteClasses({ AgentFactoryTest.class, AgentTest.class,&#13;&#10;&#9;&#9;FunctionGenotypeTest.class, SimpleFunctionProxyTest.class })&#13;&#10;public class AllTests {&#13;&#10;&#13;&#10;}&#13;&#10;" Filename="AllTests.java" Intrnl_Id="3"/>
+<SrcFile Content="package tests;&#13;&#10;&#13;&#10;import static org.junit.Assert.*;&#13;&#10;&#13;&#10;import org.junit.After;&#13;&#10;import org.junit.Before;&#13;&#10;import org.junit.Test;&#13;&#10;&#13;&#10;import agent.Agent;&#13;&#10;import exceptions.WrongGenotypeException;&#13;&#10;import fitness_evaluator.IFitnessProxy;&#13;&#10;import fitness_evaluator.SimpleFunctionFitnessProxy;&#13;&#10;import function.SimpleFunction;&#13;&#10;&#13;&#10;public class AgentTest {&#13;&#10;&#9;private IFitnessProxy proxy;&#13;&#10;&#9;@Before&#13;&#10;&#9;public void setUp() throws Exception {&#13;&#10;&#9;&#9;proxy = new SimpleFunctionFitnessProxy(new SimpleFunction());&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;@Test&#13;&#10;&#9;public void fightTest() throws WrongGenotypeException {&#13;&#10;&#9;&#9;Agent a1 = new Agent(50, 0.2, 100, proxy);&#13;&#10;&#9;&#9;Agent a2 = new Agent(50, 0.2, 100, proxy);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;a1.setFitness(0);&#13;&#10;&#9;&#9;a2.setFitness(1);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;a1.fight(a2);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;assert(a1.getFitness()==50 &amp;&amp; a2.getFitness()==150);&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;&#13;&#10;&#9;@Test&#13;&#10;&#9;public void hybridizeZeroRandomnessFactorTest() throws WrongGenotypeException {&#13;&#10;&#9;&#9;Agent a1 = new Agent(50, 0.2, 100, proxy);&#13;&#10;&#9;&#9;Agent a2 = new Agent(50, 0.2, 100, proxy);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;a1.setFitness(0);&#13;&#10;&#9;&#9;a2.setFitness(1);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;Agent a3 = a1.hybridize(a2);&#13;&#10;&#9;&#9;assert(a1.getEnergy()==50 &amp;&amp; a2.getEnergy()==50 &amp;&amp; a3.getEnergy()==100 &amp;&amp; a3.getFitness()==(a1.getFitness()+a2.getFitness())/2);&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;&#13;&#10;}&#13;&#10;" Filename="AgentTest.java" Intrnl_Id="4"/>
+<SrcFile Content="package tests;&#13;&#10;&#13;&#10;import static org.junit.Assert.*;&#13;&#10;&#13;&#10;import org.junit.After;&#13;&#10;import org.junit.Before;&#13;&#10;import org.junit.Test;&#13;&#10;&#13;&#10;import fitness_evaluator.IFitnessProxy;&#13;&#10;import fitness_evaluator.SimpleFunctionFitnessProxy;&#13;&#10;import function.SimpleFunction;&#13;&#10;import agent.Agent;&#13;&#10;import agent.AgentFactory;&#13;&#10;&#13;&#10;public class AgentFactoryTest {&#13;&#10;&#9;private IFitnessProxy proxy;&#13;&#10;&#9;@Before&#13;&#10;&#9;public void setUp() throws Exception {&#13;&#10;&#9;&#9;proxy = new SimpleFunctionFitnessProxy(new SimpleFunction());&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;&#13;&#10;&#9;@Test&#13;&#10;&#9;public void createAgent() {&#13;&#10;&#9;&#9;AgentFactory factory = new AgentFactory(10, 0.1, 100, proxy);&#13;&#10;&#9;&#9;Agent a = factory.createAgent();&#13;&#10;&#9;&#9;assert(a.getEnergy()==100);&#13;&#10;&#9;}&#13;&#10;&#13;&#10;}&#13;&#10;" Filename="AgentFactoryTest.java" Intrnl_Id="5"/>
+<SrcFile Content="package genotype;&#13;&#10;&#13;&#10;public abstract class Genotype {&#13;&#10;&#9;public abstract Genotype hybridize(Genotype genotype2, double randomnessFactor);&#13;&#10;}&#13;&#10;" Filename="Genotype.java" Intrnl_Id="6"/>
+<SrcFile Content="package genotype;&#13;&#10;&#13;&#10;import java.util.Random;&#13;&#10;&#13;&#10;import function.IFunction;&#13;&#10;&#13;&#10;public class FunctionGenotype extends Genotype{&#13;&#10;&#9;&#13;&#10;&#9;private int n; //dimensions&#13;&#10;&#9;private double[][] P; //simplex vertices&#13;&#10;&#9;&#13;&#10;&#9;private IFunction f;&#13;&#10;&#9;&#13;&#10;&#9;private double minDomain[];&#13;&#10;&#9;private double maxDomain[];&#13;&#10;&#9;&#13;&#10;&#9;public FunctionGenotype(IFunction f){&#13;&#10;&#9;&#9;this.f=f;&#13;&#10;&#9;&#9;this.n=f.getDimensions();&#13;&#10;&#9;&#9;P=new double[n+1][n];&#13;&#10;&#9;&#9;minDomain=f.getLowerDomainBound();&#13;&#10;&#9;&#9;maxDomain=f.getUpperDomainBound();&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;Random r = new Random();&#13;&#10;    &#9;for(int i=0;i&lt;n+1;i++){&#13;&#10;    &#9;&#9;for(int j=0;j&lt;n;j++){&#13;&#10;    &#9;&#9;&#9;&#13;&#10;    &#9;&#9;&#9;P[i][j] = minDomain[j] + (maxDomain[j] - minDomain[j]) * r.nextDouble();&#13;&#10;    &#9;&#9;}&#13;&#10;    &#9;&#9;&#13;&#10;    &#9;}&#9;&#13;&#10;&#9;&#9;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public int getN() {&#13;&#10;&#9;&#9;return n;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public void setN(int n) {&#13;&#10;&#9;&#9;this.n = n;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public double[][] getP() {&#13;&#10;&#9;&#9;return P;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public void setP(double[][] p) {&#13;&#10;&#9;&#9;P = p;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public double[] getMinDomain() {&#13;&#10;&#9;&#9;return minDomain;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public void setMinDomain(double[] minDomain) {&#13;&#10;&#9;&#9;this.minDomain = minDomain;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public double[] getMaxDomain() {&#13;&#10;&#9;&#9;return maxDomain;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public void setMaxDomain(double[] maxDomain) {&#13;&#10;&#9;&#9;this.maxDomain = maxDomain;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#13;&#10;&#9;public Genotype hybridize(Genotype gen2, double randomnessFactor) {&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;FunctionGenotype genotype2 = (FunctionGenotype) gen2;&#13;&#10;&#9;&#9;FunctionGenotype gen3 = new FunctionGenotype(f);&#13;&#10;&#9;&#9;double[][] P3=new double[n+1][n];&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;for(int i=0; i&lt;n+1;i++){&#13;&#10;&#9;&#9;&#9;for(int j=0;j&lt;n;j++){&#13;&#10;&#9;&#9;&#9;&#9;P3[i][j]=(P[i][j]+genotype2.getP()[i][j])/2;&#13;&#10;&#9;&#9;&#9;}&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;int k=(int) (n*randomnessFactor);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;Random r = new Random();&#13;&#10;&#9;&#9;for(int l=0; l&lt;k;l++){&#13;&#10;&#9;&#9;&#9;int t= r.nextInt(n);&#13;&#10;&#9;&#9;&#9;for(int j=0;j&lt;n;j++){&#13;&#10;    &#9;&#9;&#9;&#13;&#10;    &#9;&#9;&#9;P[t][j] = minDomain[j] + (maxDomain[j] - minDomain[j]) * r.nextDouble();&#13;&#10;    &#9;&#9;}&#13;&#10;&#9;&#9;&#9;&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;gen3.setP(P3);&#13;&#10;&#9;&#9;return gen3;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;&#13;&#10;&#9;&#13;&#10;}&#13;&#10;" Filename="FunctionGenotype.java" Intrnl_Id="7"/>
+<SrcFile Content="package fitness_evaluator;&#13;&#10;&#13;&#10;&#13;&#10;import exceptions.WrongGenotypeException;&#13;&#10;import function.IFunction;&#13;&#10;import genotype.FunctionGenotype;&#13;&#10;import genotype.Genotype;&#13;&#10;&#13;&#10;&#13;&#10;public class SimpleFunctionFitnessProxy implements IFitnessProxy {&#13;&#10;&#9;&#13;&#10;&#9;private IFunction f;&#13;&#10;&#9;private int n; //dimensions&#13;&#10;&#9;&#13;&#10;&#9;public SimpleFunctionFitnessProxy(IFunction function) {&#13;&#10;&#9;&#9;super();&#13;&#10;&#9;&#9;this.f = function;&#13;&#10;&#9;&#9;n=f.getDimensions();&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;&#13;&#10;&#9;private double stepResult(double[][] P){&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;double[] pointWithHighestValue=getPointWithHighestValueFromSimplex(P);&#13;&#10;&#9;&#9;double highestValue=f.getValueAt(pointWithHighestValue);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;double[] pointWithLowestValue= getPointWithLowestValueFromSimplex(P);&#13;&#10;&#9;&#9;double lowestValue=f.getValueAt(pointWithLowestValue);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;double[] meanPoint = getMeanPointInSimplex(P, pointWithHighestValue);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;double[] tmpPoint = new double[n];&#13;&#10;&#9;&#9;for(int i=0;i&lt;n;i++){&#13;&#10;&#9;&#9;&#9;tmpPoint[i]=2*meanPoint[i]-pointWithHighestValue[i];&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;double[] tmpPoint2 = new double[n];&#13;&#10;&#9;&#9;if(f.getValueAt(tmpPoint)&lt;=lowestValue){&#13;&#10;&#9;&#9;&#9;for(int i=0;i&lt;n;i++){&#13;&#10;&#9;&#9;&#9;&#9;tmpPoint2[i]=3*meanPoint[i]-pointWithHighestValue[i];&#13;&#10;&#9;&#9;&#9;}&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;else{&#13;&#10;&#9;&#9;&#9;for(int i=0;i&lt;n;i++){&#13;&#10;&#9;&#9;&#9;&#9;tmpPoint2[i]=3*meanPoint[i]/2-pointWithHighestValue[i]/2;&#13;&#10;&#9;&#9;&#9;}&#9;&#9;&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;if(f.getValueAt(tmpPoint)&gt;=f.getValueAt(tmpPoint2)){&#13;&#10;&#9;&#9;&#9;//put tmpPoint2 instead of pointWithHighestValue&#13;&#10;&#9;&#9;&#9;for(int i=0;i&lt;n;i++){&#13;&#10;&#9;&#9;&#9;&#9;pointWithHighestValue[i]=tmpPoint2[i];&#13;&#10;&#9;&#9;&#9;}&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;else{&#13;&#10;&#9;&#9;&#9;//put tmpPoint instead of pointWithHighestValue&#13;&#10;&#9;&#9;&#9;for(int i=0;i&lt;n;i++){&#13;&#10;&#9;&#9;&#9;&#9;pointWithHighestValue[i]=tmpPoint[i];&#13;&#10;&#9;&#9;&#9;}&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;return lowestValue;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;private double[] getPointWithHighestValueFromSimplex(double[][] P){&#13;&#10;&#9;&#9;double[] pointWithHighestValue;&#13;&#10;&#9;&#9;pointWithHighestValue=P[0];&#13;&#10;&#9;&#9;double highestValue;&#13;&#10;&#9;&#9;highestValue=f.getValueAt(P[0]);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;for(int i=1;i&lt;n+1;i++){&#13;&#10;&#9;&#9;&#9;if(f.getValueAt(P[i])&gt;highestValue){&#13;&#10;&#9;&#9;&#9;&#9;highestValue=f.getValueAt(P[i]);&#13;&#10;&#9;&#9;&#9;&#9;pointWithHighestValue=P[i];&#13;&#10;&#9;&#9;&#9;}&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;return pointWithHighestValue;&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;private double[] getPointWithLowestValueFromSimplex(double[][] P){&#13;&#10;&#9;&#9;double[] pointWithLowestValue;&#13;&#10;&#9;&#9;pointWithLowestValue=P[0];&#13;&#10;&#9;&#9;double lowestValue;&#13;&#10;&#9;&#9;lowestValue=f.getValueAt(P[0]);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;for(int i=1;i&lt;n+1;i++){&#13;&#10;&#9;&#9;&#9;if(f.getValueAt(P[i])&lt;lowestValue){&#13;&#10;&#9;&#9;&#9;&#9;lowestValue=f.getValueAt(P[i]);&#13;&#10;&#9;&#9;&#9;&#9;pointWithLowestValue=P[i];&#13;&#10;&#9;&#9;&#9;}&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;return pointWithLowestValue;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;&#13;&#10;&#9;private double[] getMeanPointInSimplex(double[][] P, double[] pointWithHighestValue ){&#13;&#10;&#9;&#9;double[] meanPoint = new double[n];&#13;&#10;&#9;&#9;for(int i=0;i&lt;n;i++){&#13;&#10;&#9;&#9;&#9;meanPoint[i]=-pointWithHighestValue[i]/n;&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;for(int i =0; i&lt;n+1;i++){&#13;&#10;&#9;&#9;&#9;for(int j=0; j&lt;n;j++){&#13;&#10;&#9;&#9;&#9;&#9;meanPoint[j]=meanPoint[j]+P[i][j]/n;&#13;&#10;&#9;&#9;&#9;}&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;return meanPoint;&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;@Override&#13;&#10;&#9;public Genotype createGenotype() {&#13;&#10;&#9;&#9;Genotype gen= new FunctionGenotype(f);&#13;&#10;&#9;&#9;return gen;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;@Override&#13;&#10;&#9;public double evaluateFitness(Genotype genotype) throws WrongGenotypeException {&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;try{&#13;&#10;&#9;&#9;&#9;FunctionGenotype fgenotype= (FunctionGenotype) genotype;&#13;&#10;&#9;&#9;&#9;if(fgenotype.getP()==null || fgenotype.getMaxDomain() == null|| fgenotype.getMinDomain()==null) throw new WrongGenotypeException(genotype);&#13;&#10;&#9;&#9;&#9;double[][] P=fgenotype.getP();&#13;&#10;&#9;&#9;&#9;return stepResult(P);&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;catch(Exception e){&#13;&#10;&#9;&#9;&#9;throw new WrongGenotypeException(genotype);&#13;&#10;&#9;&#9;}&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;&#13;&#10;&#13;&#10;&#9;&#13;&#10;}&#13;&#10;" Filename="SimpleFunctionFitnessProxy.java" Intrnl_Id="8"/>
+<SrcFile Content="package fitness_evaluator;&#13;&#10;&#13;&#10;import exceptions.WrongGenotypeException;&#13;&#10;import genotype.Genotype;&#13;&#10;&#13;&#10;public interface IFitnessProxy {&#13;&#10;&#9;public double evaluateFitness(Genotype genotype) throws WrongGenotypeException;&#13;&#10;&#9;public Genotype createGenotype();&#13;&#10;}&#13;&#10;" Filename="IFitnessProxy.java" Intrnl_Id="9"/>
+<SrcFile Content="package exceptions;&#13;&#10;&#13;&#10;import genotype.Genotype;&#13;&#10;&#13;&#10;public class WrongGenotypeException extends Exception{&#13;&#10;&#9;private Genotype genotype;&#13;&#10;&#9;public WrongGenotypeException(Genotype genotype){&#13;&#10;&#9;&#9;this.genotype=genotype;&#13;&#10;&#9;}&#13;&#10;}&#13;&#10;" Filename="WrongGenotypeException.java" Intrnl_Id="10"/>
+<SrcFile Content="package agent;&#13;&#10;&#13;&#10;import fitness_evaluator.IFitnessProxy;&#13;&#10;&#13;&#10;public class AgentFactory {&#13;&#10;&#9;private double energyLossFactor=50;&#13;&#10;&#9;private double genotypeRandomnessFactor=0.2; //factor which defines the probability of mutation&#13;&#10;&#9;private double energyOnStart=100.0;&#13;&#10;&#9;&#13;&#10;&#9;private IFitnessProxy fitnessEvaluator;&#13;&#10;&#13;&#10;&#9;public AgentFactory(double energyLossFactor,&#13;&#10;&#9;&#9;&#9;double genotypeRandomnessFactor, double energyOnStart,&#13;&#10;&#9;&#9;&#9;IFitnessProxy fitnessEvaluator) {&#13;&#10;&#9;&#9;super();&#13;&#10;&#9;&#9;this.energyLossFactor = energyLossFactor;&#13;&#10;&#9;&#9;this.genotypeRandomnessFactor = genotypeRandomnessFactor;&#13;&#10;&#9;&#9;this.energyOnStart = energyOnStart;&#13;&#10;&#9;&#9;this.fitnessEvaluator = fitnessEvaluator;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;&#13;&#10;&#9;&#13;&#10;&#9;public void setEnergyLossFactor(double energyLossFactor) {&#13;&#10;&#9;&#9;this.energyLossFactor = energyLossFactor;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;&#9;public void setGenotypeRandomnessFactor(double genotypeRandomnessFactor) {&#13;&#10;&#9;&#9;this.genotypeRandomnessFactor = genotypeRandomnessFactor;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;&#9;public void setEnergyOnStart(double energyOnStart) {&#13;&#10;&#9;&#9;this.energyOnStart = energyOnStart;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;&#9;public AgentFactory(IFitnessProxy fitnessEvaluator) {&#13;&#10;&#9;&#9;super();&#13;&#10;&#9;&#9;this.fitnessEvaluator = fitnessEvaluator;&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;public Agent createAgent(){&#13;&#10;&#9;&#9;Agent agent = new Agent(energyOnStart, energyLossFactor, genotypeRandomnessFactor, fitnessEvaluator);&#13;&#10;&#9;&#9;return agent;&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;}&#13;&#10;" Filename="AgentFactory.java" Intrnl_Id="11"/>
+<SrcFile Content="package agent;&#13;&#10;&#13;&#10;&#13;&#10;import exceptions.WrongGenotypeException;&#13;&#10;import fitness_evaluator.IFitnessProxy;&#13;&#10;import fitness_evaluator.SimpleFunctionFitnessProxy;&#13;&#10;import function.IFunction;&#13;&#10;import genotype.Genotype;&#13;&#10;&#13;&#10;&#13;&#10;public class Agent{&#13;&#10;&#13;&#10;&#9;private double energy; &#13;&#10;&#9;private double fitness;&#13;&#10;&#9;private Genotype genotype; &#13;&#10;&#9;&#13;&#10;&#9;private double energyLossFactor=50;&#13;&#10;&#9;private double genotypeRandomnessFactor=0.2; //factor which defines the probability of mutation&#13;&#10;&#9;private double energyOnStart=100;&#13;&#10;&#13;&#10;&#9;private IFitnessProxy fitnessEvaluator;&#13;&#10;&#9;&#13;&#10;&#9;public Agent(double energyLossFactor,&#13;&#10;&#9;&#9;&#9;double genotypeRandomnessFactor, double energyOnStart,&#13;&#10;&#9;&#9;&#9;IFitnessProxy fitnessEvaluator) {&#13;&#10;&#9;&#9;super();&#13;&#10;&#9;&#9;this.energy = energyOnStart;&#13;&#10;&#9;&#9;this.energyLossFactor = energyLossFactor;&#13;&#10;&#9;&#9;this.genotypeRandomnessFactor = genotypeRandomnessFactor;&#13;&#10;&#9;&#9;this.energyOnStart = energyOnStart;&#13;&#10;&#9;&#9;this.fitnessEvaluator = fitnessEvaluator;&#13;&#10;&#9;&#9;this.genotype= fitnessEvaluator.createGenotype();&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;public void setEnergy(double energy) {&#13;&#10;&#9;&#9;this.energy = energy;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public void setFitness(double fitness) {&#13;&#10;&#9;&#9;this.fitness = fitness;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#13;&#10;&#9;public Genotype getGenotype() {&#13;&#10;&#9;&#9;return genotype;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public void setGenotype(Genotype genotype) {&#13;&#10;&#9;&#9;this.genotype = genotype;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public double getEnergy() {&#13;&#10;&#9;&#9;return energy;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public double getFitness() {&#13;&#10;&#9;&#9;return fitness;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public void fight(Agent agent2) {&#13;&#10;&#9;&#9;if(agent2.getFitness()&lt;fitness){&#13;&#10;&#9;&#9;&#9;&#13;&#10;&#9;&#9;&#9;agent2.energy=agent2.energy-energyLossFactor;&#13;&#10;&#9;&#9;&#9;energy=energy+energyLossFactor;&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;else{&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;&#9;agent2.energy=agent2.energy+energyLossFactor;&#13;&#10;&#9;&#9;&#9;energy=energy-energyLossFactor;&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;&#13;&#10;&#9;public Agent hybridize(Agent agent2) throws WrongGenotypeException {&#13;&#10;&#9;&#9;Genotype gen= genotype.hybridize(agent2.getGenotype(), genotypeRandomnessFactor);&#13;&#10;&#9;&#9;AgentFactory factory = new AgentFactory(energyLossFactor, genotypeRandomnessFactor, energyOnStart, fitnessEvaluator);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;Agent agent3 = factory.createAgent();&#13;&#10;&#9;&#9;agent3.setGenotype(gen);&#13;&#10;&#9;&#9;&#13;&#10;&#9;&#9;energy=energy-energyOnStart/2;&#13;&#10;&#9;&#9;agent2.energy=agent2.energy-energyOnStart/2;&#13;&#10;&#9;&#9;return agent3;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;}&#13;&#10;" Filename="Agent.java" Intrnl_Id="12"/>
+</SrcFileList>
+<CritList>
+<CritListEntry Name="org.codecover.model.utils.criteria.BranchCoverage" PluginName="org.codecover"/>
+</CritList>
+<BoolOpList/>
+<HierarchyLvlTypeList>
+<HierarchyLvlType EnglishName="package" IntrnlName="package" Intrnl_Id="13"/>
+<HierarchyLvlType EnglishName="interface" IntrnlName="interface" Intrnl_Id="14"/>
+<HierarchyLvlType EnglishName="method" IntrnlName="method" Intrnl_Id="15"/>
+<HierarchyLvlType EnglishName="class" IntrnlName="class" Intrnl_Id="16"/>
+<HierarchyLvlType EnglishName="default package" IntrnlName="default package" Intrnl_Id="17"/>
+</HierarchyLvlTypeList>
+<MASTRoot>
+<HierarchyLvl HierarchyLvlId="67" HierarchyLvlTypeId="17" Intrnl_Id="18" Name="default package">
+<Header/>
+<LocList/>
+<HierarchyLvl HierarchyLvlId="62" HierarchyLvlTypeId="13" Intrnl_Id="19" Name="tests">
+<Header/>
+<LocList/>
+<HierarchyLvl HierarchyLvlId="5" HierarchyLvlTypeId="16" Intrnl_Id="20" Name="SimpleFunctionProxyTest">
+<Header>
+<Loc EndOffset="386" SrcFileId="1" StartOffset="350"/>
+</Header>
+<LocList>
+<Loc EndOffset="1349" SrcFileId="1" StartOffset="350"/>
+</LocList>
+<HierarchyLvl HierarchyLvlId="1" HierarchyLvlTypeId="15" Intrnl_Id="21" Name="setUp">
+<Header>
+<Loc EndOffset="499" SrcFileId="1" StartOffset="453"/>
+</Header>
+<LocList>
+<Loc EndOffset="579" SrcFileId="1" StartOffset="453"/>
+</LocList>
+<StmntSeq Intrnl_Id="22">
+<LocList>
+<Loc EndOffset="529" SrcFileId="1" StartOffset="505"/>
+<Loc EndOffset="575" SrcFileId="1" StartOffset="533"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="tests.SimpleFunctionProxyTest.java" Intrnl_Id="23">
+<LocList>
+<Loc EndOffset="529" SrcFileId="1" StartOffset="505"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S2" CovItemPrefix="tests.SimpleFunctionProxyTest.java" Intrnl_Id="24">
+<LocList>
+<Loc EndOffset="575" SrcFileId="1" StartOffset="533"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="2" HierarchyLvlTypeId="15" Intrnl_Id="25" Name="evaluateFitnessThrowingExceptionTest">
+<Header>
+<Loc EndOffset="716" SrcFileId="1" StartOffset="586"/>
+</Header>
+<LocList>
+<Loc EndOffset="780" SrcFileId="1" StartOffset="586"/>
+</LocList>
+<StmntSeq Intrnl_Id="26">
+<LocList>
+<Loc EndOffset="740" SrcFileId="1" StartOffset="722"/>
+<Loc EndOffset="771" SrcFileId="1" StartOffset="744"/>
+</LocList>
+<BasicStmnt CovItemId="S3" CovItemPrefix="tests.SimpleFunctionProxyTest.java" Intrnl_Id="27">
+<LocList>
+<Loc EndOffset="740" SrcFileId="1" StartOffset="722"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S4" CovItemPrefix="tests.SimpleFunctionProxyTest.java" Intrnl_Id="28">
+<LocList>
+<Loc EndOffset="771" SrcFileId="1" StartOffset="744"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="3" HierarchyLvlTypeId="15" Intrnl_Id="29" Name="evaluateFitnessThrowingExceptionSecondTest">
+<Header>
+<Loc EndOffset="922" SrcFileId="1" StartOffset="786"/>
+</Header>
+<LocList>
+<Loc EndOffset="1047" SrcFileId="1" StartOffset="786"/>
+</LocList>
+<StmntSeq Intrnl_Id="30">
+<LocList>
+<Loc EndOffset="983" SrcFileId="1" StartOffset="931"/>
+<Loc EndOffset="1009" SrcFileId="1" StartOffset="988"/>
+<Loc EndOffset="1040" SrcFileId="1" StartOffset="1013"/>
+</LocList>
+<BasicStmnt CovItemId="S5" CovItemPrefix="tests.SimpleFunctionProxyTest.java" Intrnl_Id="31">
+<LocList>
+<Loc EndOffset="983" SrcFileId="1" StartOffset="931"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S6" CovItemPrefix="tests.SimpleFunctionProxyTest.java" Intrnl_Id="32">
+<LocList>
+<Loc EndOffset="1009" SrcFileId="1" StartOffset="988"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S7" CovItemPrefix="tests.SimpleFunctionProxyTest.java" Intrnl_Id="33">
+<LocList>
+<Loc EndOffset="1040" SrcFileId="1" StartOffset="1013"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="4" HierarchyLvlTypeId="15" Intrnl_Id="34" Name="evaluateFitnesTest">
+<Header>
+<Loc EndOffset="1129" SrcFileId="1" StartOffset="1059"/>
+</Header>
+<LocList>
+<Loc EndOffset="1343" SrcFileId="1" StartOffset="1059"/>
+</LocList>
+<StmntSeq Intrnl_Id="35">
+<LocList>
+<Loc EndOffset="1181" SrcFileId="1" StartOffset="1134"/>
+<Loc EndOffset="1218" SrcFileId="1" StartOffset="1185"/>
+<Loc EndOffset="1235" SrcFileId="1" StartOffset="1225"/>
+<Loc EndOffset="1249" SrcFileId="1" StartOffset="1239"/>
+<Loc EndOffset="1265" SrcFileId="1" StartOffset="1253"/>
+<Loc EndOffset="1312" SrcFileId="1" StartOffset="1269"/>
+</LocList>
+<BasicStmnt CovItemId="S8" CovItemPrefix="tests.SimpleFunctionProxyTest.java" Intrnl_Id="36">
+<LocList>
+<Loc EndOffset="1181" SrcFileId="1" StartOffset="1134"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S9" CovItemPrefix="tests.SimpleFunctionProxyTest.java" Intrnl_Id="37">
+<LocList>
+<Loc EndOffset="1218" SrcFileId="1" StartOffset="1185"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S10" CovItemPrefix="tests.SimpleFunctionProxyTest.java" Intrnl_Id="38">
+<LocList>
+<Loc EndOffset="1235" SrcFileId="1" StartOffset="1225"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S11" CovItemPrefix="tests.SimpleFunctionProxyTest.java" Intrnl_Id="39">
+<LocList>
+<Loc EndOffset="1249" SrcFileId="1" StartOffset="1239"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S12" CovItemPrefix="tests.SimpleFunctionProxyTest.java" Intrnl_Id="40">
+<LocList>
+<Loc EndOffset="1265" SrcFileId="1" StartOffset="1253"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S13" CovItemPrefix="tests.SimpleFunctionProxyTest.java" Intrnl_Id="41">
+<LocList>
+<Loc EndOffset="1312" SrcFileId="1" StartOffset="1269"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="10" HierarchyLvlTypeId="16" Intrnl_Id="42" Name="FunctionGenotypeTest">
+<Header>
+<Loc EndOffset="290" SrcFileId="2" StartOffset="257"/>
+</Header>
+<LocList>
+<Loc EndOffset="1792" SrcFileId="2" StartOffset="257"/>
+</LocList>
+<HierarchyLvl HierarchyLvlId="6" HierarchyLvlTypeId="15" Intrnl_Id="43" Name="setUp">
+<Header>
+<Loc EndOffset="396" SrcFileId="2" StartOffset="350"/>
+</Header>
+<LocList>
+<Loc EndOffset="430" SrcFileId="2" StartOffset="350"/>
+</LocList>
+<StmntSeq Intrnl_Id="44">
+<LocList>
+<Loc EndOffset="426" SrcFileId="2" StartOffset="402"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="45">
+<LocList>
+<Loc EndOffset="426" SrcFileId="2" StartOffset="402"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="7" HierarchyLvlTypeId="15" Intrnl_Id="46" Name="constructorTest">
+<Header>
+<Loc EndOffset="472" SrcFileId="2" StartOffset="435"/>
+</Header>
+<LocList>
+<Loc EndOffset="764" SrcFileId="2" StartOffset="435"/>
+</LocList>
+<StmntSeq Intrnl_Id="47">
+<LocList>
+<Loc EndOffset="508" SrcFileId="2" StartOffset="478"/>
+<Loc EndOffset="552" SrcFileId="2" StartOffset="512"/>
+<Loc EndOffset="648" SrcFileId="2" StartOffset="608"/>
+</LocList>
+<BasicStmnt CovItemId="S2" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="48">
+<LocList>
+<Loc EndOffset="508" SrcFileId="2" StartOffset="478"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S3" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="49">
+<LocList>
+<Loc EndOffset="552" SrcFileId="2" StartOffset="512"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S4" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="50">
+<LocList>
+<Loc EndOffset="648" SrcFileId="2" StartOffset="608"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="8" HierarchyLvlTypeId="15" Intrnl_Id="51" Name="hybridizeZeroRandomnessTest">
+<Header>
+<Loc EndOffset="818" SrcFileId="2" StartOffset="769"/>
+</Header>
+<LocList>
+<Loc EndOffset="1258" SrcFileId="2" StartOffset="769"/>
+</LocList>
+<StmntSeq Intrnl_Id="52">
+<LocList>
+<Loc EndOffset="853" SrcFileId="2" StartOffset="823"/>
+<Loc EndOffset="905" SrcFileId="2" StartOffset="857"/>
+<Loc EndOffset="946" SrcFileId="2" StartOffset="913"/>
+<Loc EndOffset="963" SrcFileId="2" StartOffset="953"/>
+<Loc EndOffset="977" SrcFileId="2" StartOffset="967"/>
+<Loc EndOffset="993" SrcFileId="2" StartOffset="981"/>
+<Loc EndOffset="1035" SrcFileId="2" StartOffset="1001"/>
+<Loc EndOffset="1052" SrcFileId="2" StartOffset="1042"/>
+<Loc EndOffset="1066" SrcFileId="2" StartOffset="1056"/>
+<Loc EndOffset="1084" SrcFileId="2" StartOffset="1070"/>
+<Loc EndOffset="1160" SrcFileId="2" StartOffset="1092"/>
+</LocList>
+<BasicStmnt CovItemId="S5" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="53">
+<LocList>
+<Loc EndOffset="853" SrcFileId="2" StartOffset="823"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S6" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="54">
+<LocList>
+<Loc EndOffset="905" SrcFileId="2" StartOffset="857"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S7" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="55">
+<LocList>
+<Loc EndOffset="946" SrcFileId="2" StartOffset="913"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S8" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="56">
+<LocList>
+<Loc EndOffset="963" SrcFileId="2" StartOffset="953"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S9" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="57">
+<LocList>
+<Loc EndOffset="977" SrcFileId="2" StartOffset="967"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S10" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="58">
+<LocList>
+<Loc EndOffset="993" SrcFileId="2" StartOffset="981"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S11" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="59">
+<LocList>
+<Loc EndOffset="1035" SrcFileId="2" StartOffset="1001"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S12" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="60">
+<LocList>
+<Loc EndOffset="1052" SrcFileId="2" StartOffset="1042"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S13" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="61">
+<LocList>
+<Loc EndOffset="1066" SrcFileId="2" StartOffset="1056"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S14" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="62">
+<LocList>
+<Loc EndOffset="1084" SrcFileId="2" StartOffset="1070"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S15" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="63">
+<LocList>
+<Loc EndOffset="1160" SrcFileId="2" StartOffset="1092"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="9" HierarchyLvlTypeId="15" Intrnl_Id="64" Name="hybridizeTest">
+<Header>
+<Loc EndOffset="1299" SrcFileId="2" StartOffset="1264"/>
+</Header>
+<LocList>
+<Loc EndOffset="1789" SrcFileId="2" StartOffset="1264"/>
+</LocList>
+<StmntSeq Intrnl_Id="65">
+<LocList>
+<Loc EndOffset="1334" SrcFileId="2" StartOffset="1304"/>
+<Loc EndOffset="1386" SrcFileId="2" StartOffset="1338"/>
+<Loc EndOffset="1427" SrcFileId="2" StartOffset="1394"/>
+<Loc EndOffset="1444" SrcFileId="2" StartOffset="1434"/>
+<Loc EndOffset="1458" SrcFileId="2" StartOffset="1448"/>
+<Loc EndOffset="1474" SrcFileId="2" StartOffset="1462"/>
+<Loc EndOffset="1516" SrcFileId="2" StartOffset="1482"/>
+<Loc EndOffset="1533" SrcFileId="2" StartOffset="1523"/>
+<Loc EndOffset="1547" SrcFileId="2" StartOffset="1537"/>
+<Loc EndOffset="1565" SrcFileId="2" StartOffset="1551"/>
+<Loc EndOffset="1641" SrcFileId="2" StartOffset="1573"/>
+</LocList>
+<BasicStmnt CovItemId="S16" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="66">
+<LocList>
+<Loc EndOffset="1334" SrcFileId="2" StartOffset="1304"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S17" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="67">
+<LocList>
+<Loc EndOffset="1386" SrcFileId="2" StartOffset="1338"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S18" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="68">
+<LocList>
+<Loc EndOffset="1427" SrcFileId="2" StartOffset="1394"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S19" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="69">
+<LocList>
+<Loc EndOffset="1444" SrcFileId="2" StartOffset="1434"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S20" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="70">
+<LocList>
+<Loc EndOffset="1458" SrcFileId="2" StartOffset="1448"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S21" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="71">
+<LocList>
+<Loc EndOffset="1474" SrcFileId="2" StartOffset="1462"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S22" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="72">
+<LocList>
+<Loc EndOffset="1516" SrcFileId="2" StartOffset="1482"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S23" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="73">
+<LocList>
+<Loc EndOffset="1533" SrcFileId="2" StartOffset="1523"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S24" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="74">
+<LocList>
+<Loc EndOffset="1547" SrcFileId="2" StartOffset="1537"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S25" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="75">
+<LocList>
+<Loc EndOffset="1565" SrcFileId="2" StartOffset="1551"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S26" CovItemPrefix="tests.FunctionGenotypeTest.java" Intrnl_Id="76">
+<LocList>
+<Loc EndOffset="1641" SrcFileId="2" StartOffset="1573"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="11" HierarchyLvlTypeId="16" Intrnl_Id="77" Name="AllTests">
+<Header>
+<Loc EndOffset="299" SrcFileId="3" StartOffset="133"/>
+</Header>
+<LocList>
+<Loc EndOffset="306" SrcFileId="3" StartOffset="133"/>
+</LocList>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="15" HierarchyLvlTypeId="16" Intrnl_Id="78" Name="AgentTest">
+<Header>
+<Loc EndOffset="348" SrcFileId="4" StartOffset="326"/>
+</Header>
+<LocList>
+<Loc EndOffset="1206" SrcFileId="4" StartOffset="326"/>
+</LocList>
+<HierarchyLvl HierarchyLvlId="12" HierarchyLvlTypeId="15" Intrnl_Id="79" Name="setUp">
+<Header>
+<Loc EndOffset="430" SrcFileId="4" StartOffset="384"/>
+</Header>
+<LocList>
+<Loc EndOffset="501" SrcFileId="4" StartOffset="384"/>
+</LocList>
+<StmntSeq Intrnl_Id="80">
+<LocList>
+<Loc EndOffset="497" SrcFileId="4" StartOffset="436"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="tests.AgentTest.java" Intrnl_Id="81">
+<LocList>
+<Loc EndOffset="497" SrcFileId="4" StartOffset="436"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="13" HierarchyLvlTypeId="15" Intrnl_Id="82" Name="fightTest">
+<Header>
+<Loc EndOffset="567" SrcFileId="4" StartOffset="506"/>
+</Header>
+<LocList>
+<Loc EndOffset="792" SrcFileId="4" StartOffset="506"/>
+</LocList>
+<StmntSeq Intrnl_Id="83">
+<LocList>
+<Loc EndOffset="615" SrcFileId="4" StartOffset="573"/>
+<Loc EndOffset="661" SrcFileId="4" StartOffset="619"/>
+<Loc EndOffset="686" SrcFileId="4" StartOffset="669"/>
+<Loc EndOffset="707" SrcFileId="4" StartOffset="690"/>
+<Loc EndOffset="728" SrcFileId="4" StartOffset="715"/>
+</LocList>
+<BasicStmnt CovItemId="S2" CovItemPrefix="tests.AgentTest.java" Intrnl_Id="84">
+<LocList>
+<Loc EndOffset="615" SrcFileId="4" StartOffset="573"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S3" CovItemPrefix="tests.AgentTest.java" Intrnl_Id="85">
+<LocList>
+<Loc EndOffset="661" SrcFileId="4" StartOffset="619"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S4" CovItemPrefix="tests.AgentTest.java" Intrnl_Id="86">
+<LocList>
+<Loc EndOffset="686" SrcFileId="4" StartOffset="669"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S5" CovItemPrefix="tests.AgentTest.java" Intrnl_Id="87">
+<LocList>
+<Loc EndOffset="707" SrcFileId="4" StartOffset="690"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S6" CovItemPrefix="tests.AgentTest.java" Intrnl_Id="88">
+<LocList>
+<Loc EndOffset="728" SrcFileId="4" StartOffset="715"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="14" HierarchyLvlTypeId="15" Intrnl_Id="89" Name="hybridizeZeroRandomnessFactorTest">
+<Header>
+<Loc EndOffset="885" SrcFileId="4" StartOffset="800"/>
+</Header>
+<LocList>
+<Loc EndOffset="1197" SrcFileId="4" StartOffset="800"/>
+</LocList>
+<StmntSeq Intrnl_Id="90">
+<LocList>
+<Loc EndOffset="933" SrcFileId="4" StartOffset="891"/>
+<Loc EndOffset="979" SrcFileId="4" StartOffset="937"/>
+<Loc EndOffset="1004" SrcFileId="4" StartOffset="987"/>
+<Loc EndOffset="1025" SrcFileId="4" StartOffset="1008"/>
+<Loc EndOffset="1061" SrcFileId="4" StartOffset="1033"/>
+</LocList>
+<BasicStmnt CovItemId="S7" CovItemPrefix="tests.AgentTest.java" Intrnl_Id="91">
+<LocList>
+<Loc EndOffset="933" SrcFileId="4" StartOffset="891"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S8" CovItemPrefix="tests.AgentTest.java" Intrnl_Id="92">
+<LocList>
+<Loc EndOffset="979" SrcFileId="4" StartOffset="937"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S9" CovItemPrefix="tests.AgentTest.java" Intrnl_Id="93">
+<LocList>
+<Loc EndOffset="1004" SrcFileId="4" StartOffset="987"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S10" CovItemPrefix="tests.AgentTest.java" Intrnl_Id="94">
+<LocList>
+<Loc EndOffset="1025" SrcFileId="4" StartOffset="1008"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S11" CovItemPrefix="tests.AgentTest.java" Intrnl_Id="95">
+<LocList>
+<Loc EndOffset="1061" SrcFileId="4" StartOffset="1033"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="18" HierarchyLvlTypeId="16" Intrnl_Id="96" Name="AgentFactoryTest">
+<Header>
+<Loc EndOffset="340" SrcFileId="5" StartOffset="311"/>
+</Header>
+<LocList>
+<Loc EndOffset="677" SrcFileId="5" StartOffset="311"/>
+</LocList>
+<HierarchyLvl HierarchyLvlId="16" HierarchyLvlTypeId="15" Intrnl_Id="97" Name="setUp">
+<Header>
+<Loc EndOffset="422" SrcFileId="5" StartOffset="376"/>
+</Header>
+<LocList>
+<Loc EndOffset="493" SrcFileId="5" StartOffset="376"/>
+</LocList>
+<StmntSeq Intrnl_Id="98">
+<LocList>
+<Loc EndOffset="489" SrcFileId="5" StartOffset="428"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="tests.AgentFactoryTest.java" Intrnl_Id="99">
+<LocList>
+<Loc EndOffset="489" SrcFileId="5" StartOffset="428"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="17" HierarchyLvlTypeId="15" Intrnl_Id="100" Name="createAgent">
+<Header>
+<Loc EndOffset="534" SrcFileId="5" StartOffset="501"/>
+</Header>
+<LocList>
+<Loc EndOffset="672" SrcFileId="5" StartOffset="501"/>
+</LocList>
+<StmntSeq Intrnl_Id="101">
+<LocList>
+<Loc EndOffset="601" SrcFileId="5" StartOffset="540"/>
+<Loc EndOffset="637" SrcFileId="5" StartOffset="605"/>
+</LocList>
+<BasicStmnt CovItemId="S2" CovItemPrefix="tests.AgentFactoryTest.java" Intrnl_Id="102">
+<LocList>
+<Loc EndOffset="601" SrcFileId="5" StartOffset="540"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S3" CovItemPrefix="tests.AgentFactoryTest.java" Intrnl_Id="103">
+<LocList>
+<Loc EndOffset="637" SrcFileId="5" StartOffset="605"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="63" HierarchyLvlTypeId="13" Intrnl_Id="104" Name="genotype">
+<Header/>
+<LocList/>
+<HierarchyLvl HierarchyLvlId="20" HierarchyLvlTypeId="16" Intrnl_Id="105" Name="Genotype">
+<Header>
+<Loc EndOffset="51" SrcFileId="6" StartOffset="21"/>
+</Header>
+<LocList>
+<Loc EndOffset="139" SrcFileId="6" StartOffset="21"/>
+</LocList>
+<HierarchyLvl HierarchyLvlId="19" HierarchyLvlTypeId="15" Intrnl_Id="106" Name="hybridize">
+<Header>
+<Loc EndOffset="135" SrcFileId="6" StartOffset="56"/>
+</Header>
+<LocList>
+<Loc EndOffset="136" SrcFileId="6" StartOffset="56"/>
+</LocList>
+</HierarchyLvl>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="31" HierarchyLvlTypeId="16" Intrnl_Id="107" Name="FunctionGenotype">
+<Header>
+<Loc EndOffset="125" SrcFileId="7" StartOffset="79"/>
+</Header>
+<LocList>
+<Loc EndOffset="1828" SrcFileId="7" StartOffset="79"/>
+</LocList>
+<HierarchyLvl HierarchyLvlId="21" HierarchyLvlTypeId="15" Intrnl_Id="108" Name="FunctionGenotype">
+<Header>
+<Loc EndOffset="333" SrcFileId="7" StartOffset="297"/>
+</Header>
+<LocList>
+<Loc EndOffset="692" SrcFileId="7" StartOffset="297"/>
+</LocList>
+<StmntSeq Intrnl_Id="109">
+<LocList>
+<Loc EndOffset="347" SrcFileId="7" StartOffset="338"/>
+<Loc EndOffset="376" SrcFileId="7" StartOffset="351"/>
+<Loc EndOffset="401" SrcFileId="7" StartOffset="380"/>
+<Loc EndOffset="439" SrcFileId="7" StartOffset="405"/>
+<Loc EndOffset="477" SrcFileId="7" StartOffset="443"/>
+<Loc EndOffset="509" SrcFileId="7" StartOffset="485"/>
+<Loc EndOffset="683" SrcFileId="7" StartOffset="516"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="110">
+<LocList>
+<Loc EndOffset="347" SrcFileId="7" StartOffset="338"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S2" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="111">
+<LocList>
+<Loc EndOffset="376" SrcFileId="7" StartOffset="351"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S3" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="112">
+<LocList>
+<Loc EndOffset="401" SrcFileId="7" StartOffset="380"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S4" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="113">
+<LocList>
+<Loc EndOffset="439" SrcFileId="7" StartOffset="405"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S5" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="114">
+<LocList>
+<Loc EndOffset="477" SrcFileId="7" StartOffset="443"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S6" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="115">
+<LocList>
+<Loc EndOffset="509" SrcFileId="7" StartOffset="485"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S7" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="116" MltplExecId="L1-2" MltplExecPrefix="genotype.FunctionGenotype.java" NvrExecId="L1-0" NvrExecPrefix="genotype.FunctionGenotype.java" OnceExecutedId="L1-1" OnceExecutedPrefix="genotype.FunctionGenotype.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="117">
+<LocList>
+<Loc EndOffset="667" SrcFileId="7" StartOffset="547"/>
+</LocList>
+<LoopStmnt CovItemId="S8" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="118" MltplExecId="L2-2" MltplExecPrefix="genotype.FunctionGenotype.java" NvrExecId="L2-0" NvrExecPrefix="genotype.FunctionGenotype.java" OnceExecutedId="L2-1" OnceExecutedPrefix="genotype.FunctionGenotype.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="119">
+<LocList>
+<Loc EndOffset="658" SrcFileId="7" StartOffset="586"/>
+</LocList>
+<BasicStmnt CovItemId="S9" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="120">
+<LocList>
+<Loc EndOffset="658" SrcFileId="7" StartOffset="586"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="550" SrcFileId="7" StartOffset="547"/>
+<LocList>
+<Loc EndOffset="667" SrcFileId="7" StartOffset="547"/>
+</LocList>
+</LoopStmnt>
+</StmntSeq>
+<Keyword EndOffset="519" SrcFileId="7" StartOffset="516"/>
+<LocList>
+<Loc EndOffset="683" SrcFileId="7" StartOffset="516"/>
+</LocList>
+</LoopStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="22" HierarchyLvlTypeId="15" Intrnl_Id="121" Name="getN">
+<Header>
+<Loc EndOffset="714" SrcFileId="7" StartOffset="697"/>
+</Header>
+<LocList>
+<Loc EndOffset="733" SrcFileId="7" StartOffset="697"/>
+</LocList>
+<StmntSeq Intrnl_Id="122">
+<LocList>
+<Loc EndOffset="729" SrcFileId="7" StartOffset="720"/>
+</LocList>
+<BasicStmnt CovItemId="S10" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="123">
+<LocList>
+<Loc EndOffset="729" SrcFileId="7" StartOffset="720"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="23" HierarchyLvlTypeId="15" Intrnl_Id="124" Name="setN">
+<Header>
+<Loc EndOffset="761" SrcFileId="7" StartOffset="738"/>
+</Header>
+<LocList>
+<Loc EndOffset="782" SrcFileId="7" StartOffset="738"/>
+</LocList>
+<StmntSeq Intrnl_Id="125">
+<LocList>
+<Loc EndOffset="778" SrcFileId="7" StartOffset="767"/>
+</LocList>
+<BasicStmnt CovItemId="S11" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="126">
+<LocList>
+<Loc EndOffset="778" SrcFileId="7" StartOffset="767"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="24" HierarchyLvlTypeId="15" Intrnl_Id="127" Name="getP">
+<Header>
+<Loc EndOffset="811" SrcFileId="7" StartOffset="787"/>
+</Header>
+<LocList>
+<Loc EndOffset="830" SrcFileId="7" StartOffset="787"/>
+</LocList>
+<StmntSeq Intrnl_Id="128">
+<LocList>
+<Loc EndOffset="826" SrcFileId="7" StartOffset="817"/>
+</LocList>
+<BasicStmnt CovItemId="S12" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="129">
+<LocList>
+<Loc EndOffset="826" SrcFileId="7" StartOffset="817"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="25" HierarchyLvlTypeId="15" Intrnl_Id="130" Name="setP">
+<Header>
+<Loc EndOffset="865" SrcFileId="7" StartOffset="835"/>
+</Header>
+<LocList>
+<Loc EndOffset="881" SrcFileId="7" StartOffset="835"/>
+</LocList>
+<StmntSeq Intrnl_Id="131">
+<LocList>
+<Loc EndOffset="877" SrcFileId="7" StartOffset="871"/>
+</LocList>
+<BasicStmnt CovItemId="S13" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="132">
+<LocList>
+<Loc EndOffset="877" SrcFileId="7" StartOffset="871"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="26" HierarchyLvlTypeId="15" Intrnl_Id="133" Name="getMinDomain">
+<Header>
+<Loc EndOffset="916" SrcFileId="7" StartOffset="886"/>
+</Header>
+<LocList>
+<Loc EndOffset="943" SrcFileId="7" StartOffset="886"/>
+</LocList>
+<StmntSeq Intrnl_Id="134">
+<LocList>
+<Loc EndOffset="939" SrcFileId="7" StartOffset="922"/>
+</LocList>
+<BasicStmnt CovItemId="S14" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="135">
+<LocList>
+<Loc EndOffset="939" SrcFileId="7" StartOffset="922"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="27" HierarchyLvlTypeId="15" Intrnl_Id="136" Name="setMinDomain">
+<Header>
+<Loc EndOffset="992" SrcFileId="7" StartOffset="948"/>
+</Header>
+<LocList>
+<Loc EndOffset="1029" SrcFileId="7" StartOffset="948"/>
+</LocList>
+<StmntSeq Intrnl_Id="137">
+<LocList>
+<Loc EndOffset="1025" SrcFileId="7" StartOffset="998"/>
+</LocList>
+<BasicStmnt CovItemId="S15" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="138">
+<LocList>
+<Loc EndOffset="1025" SrcFileId="7" StartOffset="998"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="28" HierarchyLvlTypeId="15" Intrnl_Id="139" Name="getMaxDomain">
+<Header>
+<Loc EndOffset="1064" SrcFileId="7" StartOffset="1034"/>
+</Header>
+<LocList>
+<Loc EndOffset="1091" SrcFileId="7" StartOffset="1034"/>
+</LocList>
+<StmntSeq Intrnl_Id="140">
+<LocList>
+<Loc EndOffset="1087" SrcFileId="7" StartOffset="1070"/>
+</LocList>
+<BasicStmnt CovItemId="S16" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="141">
+<LocList>
+<Loc EndOffset="1087" SrcFileId="7" StartOffset="1070"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="29" HierarchyLvlTypeId="15" Intrnl_Id="142" Name="setMaxDomain">
+<Header>
+<Loc EndOffset="1140" SrcFileId="7" StartOffset="1096"/>
+</Header>
+<LocList>
+<Loc EndOffset="1177" SrcFileId="7" StartOffset="1096"/>
+</LocList>
+<StmntSeq Intrnl_Id="143">
+<LocList>
+<Loc EndOffset="1173" SrcFileId="7" StartOffset="1146"/>
+</LocList>
+<BasicStmnt CovItemId="S17" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="144">
+<LocList>
+<Loc EndOffset="1173" SrcFileId="7" StartOffset="1146"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="30" HierarchyLvlTypeId="15" Intrnl_Id="145" Name="hybridize">
+<Header>
+<Loc EndOffset="1249" SrcFileId="7" StartOffset="1184"/>
+</Header>
+<LocList>
+<Loc EndOffset="1817" SrcFileId="7" StartOffset="1184"/>
+</LocList>
+<StmntSeq Intrnl_Id="146">
+<LocList>
+<Loc EndOffset="1312" SrcFileId="7" StartOffset="1259"/>
+<Loc EndOffset="1364" SrcFileId="7" StartOffset="1316"/>
+<Loc EndOffset="1401" SrcFileId="7" StartOffset="1368"/>
+<Loc EndOffset="1520" SrcFileId="7" StartOffset="1409"/>
+<Loc EndOffset="1561" SrcFileId="7" StartOffset="1528"/>
+<Loc EndOffset="1593" SrcFileId="7" StartOffset="1569"/>
+<Loc EndOffset="1779" SrcFileId="7" StartOffset="1597"/>
+<Loc EndOffset="1797" SrcFileId="7" StartOffset="1783"/>
+<Loc EndOffset="1813" SrcFileId="7" StartOffset="1801"/>
+</LocList>
+<BasicStmnt CovItemId="S18" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="147">
+<LocList>
+<Loc EndOffset="1312" SrcFileId="7" StartOffset="1259"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S19" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="148">
+<LocList>
+<Loc EndOffset="1364" SrcFileId="7" StartOffset="1316"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S20" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="149">
+<LocList>
+<Loc EndOffset="1401" SrcFileId="7" StartOffset="1368"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S21" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="150" MltplExecId="L3-2" MltplExecPrefix="genotype.FunctionGenotype.java" NvrExecId="L3-0" NvrExecPrefix="genotype.FunctionGenotype.java" OnceExecutedId="L3-1" OnceExecutedPrefix="genotype.FunctionGenotype.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="151">
+<LocList>
+<Loc EndOffset="1515" SrcFileId="7" StartOffset="1438"/>
+</LocList>
+<LoopStmnt CovItemId="S22" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="152" MltplExecId="L4-2" MltplExecPrefix="genotype.FunctionGenotype.java" NvrExecId="L4-0" NvrExecPrefix="genotype.FunctionGenotype.java" OnceExecutedId="L4-1" OnceExecutedPrefix="genotype.FunctionGenotype.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="153">
+<LocList>
+<Loc EndOffset="1509" SrcFileId="7" StartOffset="1465"/>
+</LocList>
+<BasicStmnt CovItemId="S23" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="154">
+<LocList>
+<Loc EndOffset="1509" SrcFileId="7" StartOffset="1465"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="1441" SrcFileId="7" StartOffset="1438"/>
+<LocList>
+<Loc EndOffset="1515" SrcFileId="7" StartOffset="1438"/>
+</LocList>
+</LoopStmnt>
+</StmntSeq>
+<Keyword EndOffset="1412" SrcFileId="7" StartOffset="1409"/>
+<LocList>
+<Loc EndOffset="1520" SrcFileId="7" StartOffset="1409"/>
+</LocList>
+</LoopStmnt>
+<BasicStmnt CovItemId="S24" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="155">
+<LocList>
+<Loc EndOffset="1561" SrcFileId="7" StartOffset="1528"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S25" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="156">
+<LocList>
+<Loc EndOffset="1593" SrcFileId="7" StartOffset="1569"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S26" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="157" MltplExecId="L5-2" MltplExecPrefix="genotype.FunctionGenotype.java" NvrExecId="L5-0" NvrExecPrefix="genotype.FunctionGenotype.java" OnceExecutedId="L5-1" OnceExecutedPrefix="genotype.FunctionGenotype.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="158">
+<LocList>
+<Loc EndOffset="1644" SrcFileId="7" StartOffset="1624"/>
+<Loc EndOffset="1769" SrcFileId="7" StartOffset="1649"/>
+</LocList>
+<BasicStmnt CovItemId="S27" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="159">
+<LocList>
+<Loc EndOffset="1644" SrcFileId="7" StartOffset="1624"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S28" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="160" MltplExecId="L6-2" MltplExecPrefix="genotype.FunctionGenotype.java" NvrExecId="L6-0" NvrExecPrefix="genotype.FunctionGenotype.java" OnceExecutedId="L6-1" OnceExecutedPrefix="genotype.FunctionGenotype.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="161">
+<LocList>
+<Loc EndOffset="1760" SrcFileId="7" StartOffset="1688"/>
+</LocList>
+<BasicStmnt CovItemId="S29" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="162">
+<LocList>
+<Loc EndOffset="1760" SrcFileId="7" StartOffset="1688"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="1652" SrcFileId="7" StartOffset="1649"/>
+<LocList>
+<Loc EndOffset="1769" SrcFileId="7" StartOffset="1649"/>
+</LocList>
+</LoopStmnt>
+</StmntSeq>
+<Keyword EndOffset="1600" SrcFileId="7" StartOffset="1597"/>
+<LocList>
+<Loc EndOffset="1779" SrcFileId="7" StartOffset="1597"/>
+</LocList>
+</LoopStmnt>
+<BasicStmnt CovItemId="S30" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="163">
+<LocList>
+<Loc EndOffset="1797" SrcFileId="7" StartOffset="1783"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S31" CovItemPrefix="genotype.FunctionGenotype.java" Intrnl_Id="164">
+<LocList>
+<Loc EndOffset="1813" SrcFileId="7" StartOffset="1801"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="64" HierarchyLvlTypeId="13" Intrnl_Id="165" Name="fitness_evaluator">
+<Header/>
+<LocList/>
+<HierarchyLvl HierarchyLvlId="39" HierarchyLvlTypeId="16" Intrnl_Id="166" Name="SimpleFunctionFitnessProxy">
+<Header>
+<Loc EndOffset="233" SrcFileId="8" StartOffset="169"/>
+</Header>
+<LocList>
+<Loc EndOffset="3296" SrcFileId="8" StartOffset="169"/>
+</LocList>
+<HierarchyLvl HierarchyLvlId="32" HierarchyLvlTypeId="15" Intrnl_Id="167" Name="SimpleFunctionFitnessProxy">
+<Header>
+<Loc EndOffset="350" SrcFileId="8" StartOffset="297"/>
+</Header>
+<LocList>
+<Loc EndOffset="414" SrcFileId="8" StartOffset="297"/>
+</LocList>
+<StmntSeq Intrnl_Id="168">
+<LocList>
+<Loc EndOffset="364" SrcFileId="8" StartOffset="356"/>
+<Loc EndOffset="386" SrcFileId="8" StartOffset="368"/>
+<Loc EndOffset="410" SrcFileId="8" StartOffset="390"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="169">
+<LocList>
+<Loc EndOffset="364" SrcFileId="8" StartOffset="356"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S2" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="170">
+<LocList>
+<Loc EndOffset="386" SrcFileId="8" StartOffset="368"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S3" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="171">
+<LocList>
+<Loc EndOffset="410" SrcFileId="8" StartOffset="390"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="33" HierarchyLvlTypeId="15" Intrnl_Id="172" Name="stepResult">
+<Header>
+<Loc EndOffset="461" SrcFileId="8" StartOffset="422"/>
+</Header>
+<LocList>
+<Loc EndOffset="1597" SrcFileId="8" StartOffset="422"/>
+</LocList>
+<StmntSeq Intrnl_Id="173">
+<LocList>
+<Loc EndOffset="540" SrcFileId="8" StartOffset="470"/>
+<Loc EndOffset="600" SrcFileId="8" StartOffset="544"/>
+<Loc EndOffset="677" SrcFileId="8" StartOffset="608"/>
+<Loc EndOffset="735" SrcFileId="8" StartOffset="681"/>
+<Loc EndOffset="812" SrcFileId="8" StartOffset="743"/>
+<Loc EndOffset="854" SrcFileId="8" StartOffset="820"/>
+<Loc EndOffset="941" SrcFileId="8" StartOffset="858"/>
+<Loc EndOffset="984" SrcFileId="8" StartOffset="949"/>
+<Loc EndOffset="1235" SrcFileId="8" StartOffset="988"/>
+<Loc EndOffset="1570" SrcFileId="8" StartOffset="1243"/>
+<Loc EndOffset="1593" SrcFileId="8" StartOffset="1574"/>
+</LocList>
+<BasicStmnt CovItemId="S4" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="174">
+<LocList>
+<Loc EndOffset="540" SrcFileId="8" StartOffset="470"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S5" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="175">
+<LocList>
+<Loc EndOffset="600" SrcFileId="8" StartOffset="544"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S6" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="176">
+<LocList>
+<Loc EndOffset="677" SrcFileId="8" StartOffset="608"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S7" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="177">
+<LocList>
+<Loc EndOffset="735" SrcFileId="8" StartOffset="681"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S8" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="178">
+<LocList>
+<Loc EndOffset="812" SrcFileId="8" StartOffset="743"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S9" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="179">
+<LocList>
+<Loc EndOffset="854" SrcFileId="8" StartOffset="820"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S10" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="180" MltplExecId="L1-2" MltplExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" NvrExecId="L1-0" NvrExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OnceExecutedId="L1-1" OnceExecutedPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="181">
+<LocList>
+<Loc EndOffset="936" SrcFileId="8" StartOffset="884"/>
+</LocList>
+<BasicStmnt CovItemId="S11" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="182">
+<LocList>
+<Loc EndOffset="936" SrcFileId="8" StartOffset="884"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="861" SrcFileId="8" StartOffset="858"/>
+<LocList>
+<Loc EndOffset="941" SrcFileId="8" StartOffset="858"/>
+</LocList>
+</LoopStmnt>
+<BasicStmnt CovItemId="S12" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="183">
+<LocList>
+<Loc EndOffset="984" SrcFileId="8" StartOffset="949"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S13" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="184">
+<Branch CovItemId="B1" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Implct="false" Intrnl_Id="185">
+<Cond/>
+<LocList>
+<Loc EndOffset="1124" SrcFileId="8" StartOffset="1027"/>
+</LocList>
+<StmntSeq Intrnl_Id="186">
+<LocList>
+<Loc EndOffset="1119" SrcFileId="8" StartOffset="1033"/>
+</LocList>
+<LoopStmnt CovItemId="S14" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="187" MltplExecId="L2-2" MltplExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" NvrExecId="L2-0" NvrExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OnceExecutedId="L2-1" OnceExecutedPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="188">
+<LocList>
+<Loc EndOffset="1113" SrcFileId="8" StartOffset="1060"/>
+</LocList>
+<BasicStmnt CovItemId="S15" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="189">
+<LocList>
+<Loc EndOffset="1113" SrcFileId="8" StartOffset="1060"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="1036" SrcFileId="8" StartOffset="1033"/>
+<LocList>
+<Loc EndOffset="1119" SrcFileId="8" StartOffset="1033"/>
+</LocList>
+</LoopStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B2" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Implct="false" Intrnl_Id="190">
+<Cond>
+<Loc EndOffset="1132" SrcFileId="8" StartOffset="1128"/>
+</Cond>
+<LocList>
+<Loc EndOffset="1235" SrcFileId="8" StartOffset="1132"/>
+</LocList>
+<StmntSeq Intrnl_Id="191">
+<LocList>
+<Loc EndOffset="1228" SrcFileId="8" StartOffset="1138"/>
+</LocList>
+<LoopStmnt CovItemId="S16" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="192" MltplExecId="L3-2" MltplExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" NvrExecId="L3-0" NvrExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OnceExecutedId="L3-1" OnceExecutedPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="193">
+<LocList>
+<Loc EndOffset="1222" SrcFileId="8" StartOffset="1165"/>
+</LocList>
+<BasicStmnt CovItemId="S17" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="194">
+<LocList>
+<Loc EndOffset="1222" SrcFileId="8" StartOffset="1165"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="1141" SrcFileId="8" StartOffset="1138"/>
+<LocList>
+<Loc EndOffset="1228" SrcFileId="8" StartOffset="1138"/>
+</LocList>
+</LoopStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="990" SrcFileId="8" StartOffset="988"/>
+<LocList>
+<Loc EndOffset="1235" SrcFileId="8" StartOffset="988"/>
+</LocList>
+</CondStmnt>
+<CondStmnt CovItemId="S18" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="195">
+<Branch CovItemId="B3" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Implct="false" Intrnl_Id="196">
+<Cond/>
+<LocList>
+<Loc EndOffset="1429" SrcFileId="8" StartOffset="1294"/>
+</LocList>
+<StmntSeq Intrnl_Id="197">
+<LocList>
+<Loc EndOffset="1424" SrcFileId="8" StartOffset="1353"/>
+</LocList>
+<LoopStmnt CovItemId="S19" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="198" MltplExecId="L4-2" MltplExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" NvrExecId="L4-0" NvrExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OnceExecutedId="L4-1" OnceExecutedPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="199">
+<LocList>
+<Loc EndOffset="1418" SrcFileId="8" StartOffset="1380"/>
+</LocList>
+<BasicStmnt CovItemId="S20" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="200">
+<LocList>
+<Loc EndOffset="1418" SrcFileId="8" StartOffset="1380"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="1356" SrcFileId="8" StartOffset="1353"/>
+<LocList>
+<Loc EndOffset="1424" SrcFileId="8" StartOffset="1353"/>
+</LocList>
+</LoopStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B4" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Implct="false" Intrnl_Id="201">
+<Cond>
+<Loc EndOffset="1437" SrcFileId="8" StartOffset="1433"/>
+</Cond>
+<LocList>
+<Loc EndOffset="1570" SrcFileId="8" StartOffset="1437"/>
+</LocList>
+<StmntSeq Intrnl_Id="202">
+<LocList>
+<Loc EndOffset="1565" SrcFileId="8" StartOffset="1495"/>
+</LocList>
+<LoopStmnt CovItemId="S21" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="203" MltplExecId="L5-2" MltplExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" NvrExecId="L5-0" NvrExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OnceExecutedId="L5-1" OnceExecutedPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="204">
+<LocList>
+<Loc EndOffset="1559" SrcFileId="8" StartOffset="1522"/>
+</LocList>
+<BasicStmnt CovItemId="S22" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="205">
+<LocList>
+<Loc EndOffset="1559" SrcFileId="8" StartOffset="1522"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="1498" SrcFileId="8" StartOffset="1495"/>
+<LocList>
+<Loc EndOffset="1565" SrcFileId="8" StartOffset="1495"/>
+</LocList>
+</LoopStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="1245" SrcFileId="8" StartOffset="1243"/>
+<LocList>
+<Loc EndOffset="1570" SrcFileId="8" StartOffset="1243"/>
+</LocList>
+</CondStmnt>
+<BasicStmnt CovItemId="S23" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="206">
+<LocList>
+<Loc EndOffset="1593" SrcFileId="8" StartOffset="1574"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="34" HierarchyLvlTypeId="15" Intrnl_Id="207" Name="getPointWithHighestValueFromSimplex">
+<Header>
+<Loc EndOffset="1668" SrcFileId="8" StartOffset="1602"/>
+</Header>
+<LocList>
+<Loc EndOffset="1986" SrcFileId="8" StartOffset="1602"/>
+</LocList>
+<StmntSeq Intrnl_Id="208">
+<LocList>
+<Loc EndOffset="1735" SrcFileId="8" StartOffset="1708"/>
+<Loc EndOffset="1795" SrcFileId="8" StartOffset="1763"/>
+<Loc EndOffset="1949" SrcFileId="8" StartOffset="1803"/>
+<Loc EndOffset="1982" SrcFileId="8" StartOffset="1953"/>
+</LocList>
+<BasicStmnt CovItemId="S24" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="209">
+<LocList>
+<Loc EndOffset="1735" SrcFileId="8" StartOffset="1708"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S25" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="210">
+<LocList>
+<Loc EndOffset="1795" SrcFileId="8" StartOffset="1763"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S26" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="211" MltplExecId="L6-2" MltplExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" NvrExecId="L6-0" NvrExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OnceExecutedId="L6-1" OnceExecutedPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="212">
+<LocList>
+<Loc EndOffset="1944" SrcFileId="8" StartOffset="1831"/>
+</LocList>
+<CondStmnt CovItemId="S27" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="213">
+<Branch CovItemId="B5" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Implct="false" Intrnl_Id="214">
+<Cond/>
+<LocList>
+<Loc EndOffset="1944" SrcFileId="8" StartOffset="1866"/>
+</LocList>
+<StmntSeq Intrnl_Id="215">
+<LocList>
+<Loc EndOffset="1905" SrcFileId="8" StartOffset="1873"/>
+<Loc EndOffset="1938" SrcFileId="8" StartOffset="1911"/>
+</LocList>
+<BasicStmnt CovItemId="S28" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="216">
+<LocList>
+<Loc EndOffset="1905" SrcFileId="8" StartOffset="1873"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S29" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="217">
+<LocList>
+<Loc EndOffset="1938" SrcFileId="8" StartOffset="1911"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B6" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Implct="true" Intrnl_Id="218">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="219">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="1833" SrcFileId="8" StartOffset="1831"/>
+<LocList>
+<Loc EndOffset="1944" SrcFileId="8" StartOffset="1831"/>
+</LocList>
+</CondStmnt>
+</StmntSeq>
+<Keyword EndOffset="1806" SrcFileId="8" StartOffset="1803"/>
+<LocList>
+<Loc EndOffset="1949" SrcFileId="8" StartOffset="1803"/>
+</LocList>
+</LoopStmnt>
+<BasicStmnt CovItemId="S30" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="220">
+<LocList>
+<Loc EndOffset="1982" SrcFileId="8" StartOffset="1953"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="35" HierarchyLvlTypeId="15" Intrnl_Id="221" Name="getPointWithLowestValueFromSimplex">
+<Header>
+<Loc EndOffset="2057" SrcFileId="8" StartOffset="1992"/>
+</Header>
+<LocList>
+<Loc EndOffset="2367" SrcFileId="8" StartOffset="1992"/>
+</LocList>
+<StmntSeq Intrnl_Id="222">
+<LocList>
+<Loc EndOffset="2122" SrcFileId="8" StartOffset="2096"/>
+<Loc EndOffset="2180" SrcFileId="8" StartOffset="2149"/>
+<Loc EndOffset="2331" SrcFileId="8" StartOffset="2188"/>
+<Loc EndOffset="2363" SrcFileId="8" StartOffset="2335"/>
+</LocList>
+<BasicStmnt CovItemId="S31" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="223">
+<LocList>
+<Loc EndOffset="2122" SrcFileId="8" StartOffset="2096"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S32" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="224">
+<LocList>
+<Loc EndOffset="2180" SrcFileId="8" StartOffset="2149"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S33" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="225" MltplExecId="L7-2" MltplExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" NvrExecId="L7-0" NvrExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OnceExecutedId="L7-1" OnceExecutedPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="226">
+<LocList>
+<Loc EndOffset="2326" SrcFileId="8" StartOffset="2216"/>
+</LocList>
+<CondStmnt CovItemId="S34" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="227">
+<Branch CovItemId="B7" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Implct="false" Intrnl_Id="228">
+<Cond/>
+<LocList>
+<Loc EndOffset="2326" SrcFileId="8" StartOffset="2250"/>
+</LocList>
+<StmntSeq Intrnl_Id="229">
+<LocList>
+<Loc EndOffset="2288" SrcFileId="8" StartOffset="2257"/>
+<Loc EndOffset="2320" SrcFileId="8" StartOffset="2294"/>
+</LocList>
+<BasicStmnt CovItemId="S35" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="230">
+<LocList>
+<Loc EndOffset="2288" SrcFileId="8" StartOffset="2257"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S36" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="231">
+<LocList>
+<Loc EndOffset="2320" SrcFileId="8" StartOffset="2294"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B8" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Implct="true" Intrnl_Id="232">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="233">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="2218" SrcFileId="8" StartOffset="2216"/>
+<LocList>
+<Loc EndOffset="2326" SrcFileId="8" StartOffset="2216"/>
+</LocList>
+</CondStmnt>
+</StmntSeq>
+<Keyword EndOffset="2191" SrcFileId="8" StartOffset="2188"/>
+<LocList>
+<Loc EndOffset="2331" SrcFileId="8" StartOffset="2188"/>
+</LocList>
+</LoopStmnt>
+<BasicStmnt CovItemId="S37" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="234">
+<LocList>
+<Loc EndOffset="2363" SrcFileId="8" StartOffset="2335"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="36" HierarchyLvlTypeId="15" Intrnl_Id="235" Name="getMeanPointInSimplex">
+<Header>
+<Loc EndOffset="2460" SrcFileId="8" StartOffset="2375"/>
+</Header>
+<LocList>
+<Loc EndOffset="2710" SrcFileId="8" StartOffset="2375"/>
+</LocList>
+<StmntSeq Intrnl_Id="236">
+<LocList>
+<Loc EndOffset="2500" SrcFileId="8" StartOffset="2465"/>
+<Loc EndOffset="2576" SrcFileId="8" StartOffset="2504"/>
+<Loc EndOffset="2685" SrcFileId="8" StartOffset="2580"/>
+<Loc EndOffset="2706" SrcFileId="8" StartOffset="2689"/>
+</LocList>
+<BasicStmnt CovItemId="S38" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="237">
+<LocList>
+<Loc EndOffset="2500" SrcFileId="8" StartOffset="2465"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S39" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="238" MltplExecId="L8-2" MltplExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" NvrExecId="L8-0" NvrExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OnceExecutedId="L8-1" OnceExecutedPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="239">
+<LocList>
+<Loc EndOffset="2571" SrcFileId="8" StartOffset="2530"/>
+</LocList>
+<BasicStmnt CovItemId="S40" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="240">
+<LocList>
+<Loc EndOffset="2571" SrcFileId="8" StartOffset="2530"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="2507" SrcFileId="8" StartOffset="2504"/>
+<LocList>
+<Loc EndOffset="2576" SrcFileId="8" StartOffset="2504"/>
+</LocList>
+</LoopStmnt>
+<LoopStmnt CovItemId="S41" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="241" MltplExecId="L9-2" MltplExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" NvrExecId="L9-0" NvrExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OnceExecutedId="L9-1" OnceExecutedPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="242">
+<LocList>
+<Loc EndOffset="2680" SrcFileId="8" StartOffset="2610"/>
+</LocList>
+<LoopStmnt CovItemId="S42" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="243" MltplExecId="L10-2" MltplExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" NvrExecId="L10-0" NvrExecPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OnceExecutedId="L10-1" OnceExecutedPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="244">
+<LocList>
+<Loc EndOffset="2674" SrcFileId="8" StartOffset="2638"/>
+</LocList>
+<BasicStmnt CovItemId="S43" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="245">
+<LocList>
+<Loc EndOffset="2674" SrcFileId="8" StartOffset="2638"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="2613" SrcFileId="8" StartOffset="2610"/>
+<LocList>
+<Loc EndOffset="2680" SrcFileId="8" StartOffset="2610"/>
+</LocList>
+</LoopStmnt>
+</StmntSeq>
+<Keyword EndOffset="2583" SrcFileId="8" StartOffset="2580"/>
+<LocList>
+<Loc EndOffset="2685" SrcFileId="8" StartOffset="2580"/>
+</LocList>
+</LoopStmnt>
+<BasicStmnt CovItemId="S44" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="246">
+<LocList>
+<Loc EndOffset="2706" SrcFileId="8" StartOffset="2689"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="37" HierarchyLvlTypeId="15" Intrnl_Id="247" Name="createGenotype">
+<Header>
+<Loc EndOffset="2760" SrcFileId="8" StartOffset="2716"/>
+</Header>
+<LocList>
+<Loc EndOffset="2823" SrcFileId="8" StartOffset="2716"/>
+</LocList>
+<StmntSeq Intrnl_Id="248">
+<LocList>
+<Loc EndOffset="2804" SrcFileId="8" StartOffset="2766"/>
+<Loc EndOffset="2819" SrcFileId="8" StartOffset="2808"/>
+</LocList>
+<BasicStmnt CovItemId="S45" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="249">
+<LocList>
+<Loc EndOffset="2804" SrcFileId="8" StartOffset="2766"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S46" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="250">
+<LocList>
+<Loc EndOffset="2819" SrcFileId="8" StartOffset="2808"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="38" HierarchyLvlTypeId="15" Intrnl_Id="251" Name="evaluateFitness">
+<Header>
+<Loc EndOffset="2918" SrcFileId="8" StartOffset="2828"/>
+</Header>
+<LocList>
+<Loc EndOffset="3283" SrcFileId="8" StartOffset="2828"/>
+</LocList>
+<StmntSeq Intrnl_Id="252">
+<LocList>
+<Loc EndOffset="2993" SrcFileId="8" StartOffset="2937"/>
+<Loc EndOffset="3137" SrcFileId="8" StartOffset="2998"/>
+<Loc EndOffset="3172" SrcFileId="8" StartOffset="3142"/>
+<Loc EndOffset="3198" SrcFileId="8" StartOffset="3177"/>
+<Loc EndOffset="3279" SrcFileId="8" StartOffset="2928"/>
+</LocList>
+<BasicStmnt CovItemId="S48" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="253">
+<LocList>
+<Loc EndOffset="2993" SrcFileId="8" StartOffset="2937"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S49" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="254">
+<Branch CovItemId="B10" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Implct="false" Intrnl_Id="255">
+<Cond/>
+<LocList>
+<Loc EndOffset="3137" SrcFileId="8" StartOffset="3094"/>
+</LocList>
+<StmntSeq Intrnl_Id="256">
+<LocList>
+<Loc EndOffset="3137" SrcFileId="8" StartOffset="3094"/>
+</LocList>
+<BasicStmnt CovItemId="S50" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="257">
+<LocList>
+<Loc EndOffset="3137" SrcFileId="8" StartOffset="3094"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B11" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Implct="true" Intrnl_Id="258">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="259">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="3000" SrcFileId="8" StartOffset="2998"/>
+<LocList>
+<Loc EndOffset="3137" SrcFileId="8" StartOffset="2998"/>
+</LocList>
+</CondStmnt>
+<BasicStmnt CovItemId="S51" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="260">
+<LocList>
+<Loc EndOffset="3172" SrcFileId="8" StartOffset="3142"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S52" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="261">
+<LocList>
+<Loc EndOffset="3198" SrcFileId="8" StartOffset="3177"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S47" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="262">
+<Branch CovItemId="B9" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Implct="true" Intrnl_Id="263">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="264">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B12" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Implct="false" Intrnl_Id="265">
+<Cond>
+<Loc EndOffset="3225" SrcFileId="8" StartOffset="3207"/>
+</Cond>
+<LocList>
+<Loc EndOffset="3279" SrcFileId="8" StartOffset="3225"/>
+</LocList>
+<StmntSeq Intrnl_Id="266">
+<LocList>
+<Loc EndOffset="3274" SrcFileId="8" StartOffset="3231"/>
+</LocList>
+<BasicStmnt CovItemId="S53" CovItemPrefix="fitness_evaluator.SimpleFunctionFitnessProxy.java" Intrnl_Id="267">
+<LocList>
+<Loc EndOffset="3274" SrcFileId="8" StartOffset="3231"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="2931" SrcFileId="8" StartOffset="2928"/>
+<LocList>
+<Loc EndOffset="3279" SrcFileId="8" StartOffset="2928"/>
+</LocList>
+</CondStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="42" HierarchyLvlTypeId="14" Intrnl_Id="268" Name="IFitnessProxy">
+<Header>
+<Loc EndOffset="132" SrcFileId="9" StartOffset="102"/>
+</Header>
+<LocList>
+<Loc EndOffset="255" SrcFileId="9" StartOffset="102"/>
+</LocList>
+<HierarchyLvl HierarchyLvlId="40" HierarchyLvlTypeId="15" Intrnl_Id="269" Name="evaluateFitness">
+<Header>
+<Loc EndOffset="215" SrcFileId="9" StartOffset="137"/>
+</Header>
+<LocList>
+<Loc EndOffset="216" SrcFileId="9" StartOffset="137"/>
+</LocList>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="41" HierarchyLvlTypeId="15" Intrnl_Id="270" Name="createGenotype">
+<Header>
+<Loc EndOffset="251" SrcFileId="9" StartOffset="219"/>
+</Header>
+<LocList>
+<Loc EndOffset="252" SrcFileId="9" StartOffset="219"/>
+</LocList>
+</HierarchyLvl>
+</HierarchyLvl>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="65" HierarchyLvlTypeId="13" Intrnl_Id="271" Name="exceptions">
+<Header/>
+<LocList/>
+<HierarchyLvl HierarchyLvlId="44" HierarchyLvlTypeId="16" Intrnl_Id="272" Name="WrongGenotypeException">
+<Header>
+<Loc EndOffset="105" SrcFileId="10" StartOffset="52"/>
+</Header>
+<LocList>
+<Loc EndOffset="221" SrcFileId="10" StartOffset="52"/>
+</LocList>
+<HierarchyLvl HierarchyLvlId="43" HierarchyLvlTypeId="15" Intrnl_Id="273" Name="WrongGenotypeException">
+<Header>
+<Loc EndOffset="186" SrcFileId="10" StartOffset="138"/>
+</Header>
+<LocList>
+<Loc EndOffset="218" SrcFileId="10" StartOffset="138"/>
+</LocList>
+<StmntSeq Intrnl_Id="274">
+<LocList>
+<Loc EndOffset="214" SrcFileId="10" StartOffset="191"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="exceptions.WrongGenotypeException.java" Intrnl_Id="275">
+<LocList>
+<Loc EndOffset="214" SrcFileId="10" StartOffset="191"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="66" HierarchyLvlTypeId="13" Intrnl_Id="276" Name="agent">
+<Header/>
+<LocList/>
+<HierarchyLvl HierarchyLvlId="51" HierarchyLvlTypeId="16" Intrnl_Id="277" Name="AgentFactory">
+<Header>
+<Loc EndOffset="86" SrcFileId="11" StartOffset="61"/>
+</Header>
+<LocList>
+<Loc EndOffset="1317" SrcFileId="11" StartOffset="61"/>
+</LocList>
+<StmntSeq Intrnl_Id="278">
+<LocList>
+<Loc EndOffset="126" SrcFileId="11" StartOffset="91"/>
+<Loc EndOffset="173" SrcFileId="11" StartOffset="129"/>
+<Loc EndOffset="262" SrcFileId="11" StartOffset="227"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="agent.AgentFactory.java" Intrnl_Id="279">
+<LocList>
+<Loc EndOffset="126" SrcFileId="11" StartOffset="91"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S2" CovItemPrefix="agent.AgentFactory.java" Intrnl_Id="280">
+<LocList>
+<Loc EndOffset="173" SrcFileId="11" StartOffset="129"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S3" CovItemPrefix="agent.AgentFactory.java" Intrnl_Id="281">
+<LocList>
+<Loc EndOffset="262" SrcFileId="11" StartOffset="227"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<HierarchyLvl HierarchyLvlId="45" HierarchyLvlTypeId="15" Intrnl_Id="282" Name="AgentFactory">
+<Header>
+<Loc EndOffset="451" SrcFileId="11" StartOffset="312"/>
+</Header>
+<LocList>
+<Loc EndOffset="659" SrcFileId="11" StartOffset="312"/>
+</LocList>
+<StmntSeq Intrnl_Id="283">
+<LocList>
+<Loc EndOffset="465" SrcFileId="11" StartOffset="457"/>
+<Loc EndOffset="510" SrcFileId="11" StartOffset="469"/>
+<Loc EndOffset="571" SrcFileId="11" StartOffset="514"/>
+<Loc EndOffset="610" SrcFileId="11" StartOffset="575"/>
+<Loc EndOffset="655" SrcFileId="11" StartOffset="614"/>
+</LocList>
+<BasicStmnt CovItemId="S4" CovItemPrefix="agent.AgentFactory.java" Intrnl_Id="284">
+<LocList>
+<Loc EndOffset="465" SrcFileId="11" StartOffset="457"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S5" CovItemPrefix="agent.AgentFactory.java" Intrnl_Id="285">
+<LocList>
+<Loc EndOffset="510" SrcFileId="11" StartOffset="469"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S6" CovItemPrefix="agent.AgentFactory.java" Intrnl_Id="286">
+<LocList>
+<Loc EndOffset="571" SrcFileId="11" StartOffset="514"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S7" CovItemPrefix="agent.AgentFactory.java" Intrnl_Id="287">
+<LocList>
+<Loc EndOffset="610" SrcFileId="11" StartOffset="575"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S8" CovItemPrefix="agent.AgentFactory.java" Intrnl_Id="288">
+<LocList>
+<Loc EndOffset="655" SrcFileId="11" StartOffset="614"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="46" HierarchyLvlTypeId="15" Intrnl_Id="289" Name="setEnergyLossFactor">
+<Header>
+<Loc EndOffset="726" SrcFileId="11" StartOffset="670"/>
+</Header>
+<LocList>
+<Loc EndOffset="777" SrcFileId="11" StartOffset="670"/>
+</LocList>
+<StmntSeq Intrnl_Id="290">
+<LocList>
+<Loc EndOffset="773" SrcFileId="11" StartOffset="732"/>
+</LocList>
+<BasicStmnt CovItemId="S9" CovItemPrefix="agent.AgentFactory.java" Intrnl_Id="291">
+<LocList>
+<Loc EndOffset="773" SrcFileId="11" StartOffset="732"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="47" HierarchyLvlTypeId="15" Intrnl_Id="292" Name="setGenotypeRandomnessFactor">
+<Header>
+<Loc EndOffset="858" SrcFileId="11" StartOffset="786"/>
+</Header>
+<LocList>
+<Loc EndOffset="925" SrcFileId="11" StartOffset="786"/>
+</LocList>
+<StmntSeq Intrnl_Id="293">
+<LocList>
+<Loc EndOffset="921" SrcFileId="11" StartOffset="864"/>
+</LocList>
+<BasicStmnt CovItemId="S10" CovItemPrefix="agent.AgentFactory.java" Intrnl_Id="294">
+<LocList>
+<Loc EndOffset="921" SrcFileId="11" StartOffset="864"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="48" HierarchyLvlTypeId="15" Intrnl_Id="295" Name="setEnergyOnStart">
+<Header>
+<Loc EndOffset="984" SrcFileId="11" StartOffset="934"/>
+</Header>
+<LocList>
+<Loc EndOffset="1029" SrcFileId="11" StartOffset="934"/>
+</LocList>
+<StmntSeq Intrnl_Id="296">
+<LocList>
+<Loc EndOffset="1025" SrcFileId="11" StartOffset="990"/>
+</LocList>
+<BasicStmnt CovItemId="S11" CovItemPrefix="agent.AgentFactory.java" Intrnl_Id="297">
+<LocList>
+<Loc EndOffset="1025" SrcFileId="11" StartOffset="990"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="49" HierarchyLvlTypeId="15" Intrnl_Id="298" Name="AgentFactory">
+<Header>
+<Loc EndOffset="1089" SrcFileId="11" StartOffset="1038"/>
+</Header>
+<LocList>
+<Loc EndOffset="1152" SrcFileId="11" StartOffset="1038"/>
+</LocList>
+<StmntSeq Intrnl_Id="299">
+<LocList>
+<Loc EndOffset="1103" SrcFileId="11" StartOffset="1095"/>
+<Loc EndOffset="1148" SrcFileId="11" StartOffset="1107"/>
+</LocList>
+<BasicStmnt CovItemId="S12" CovItemPrefix="agent.AgentFactory.java" Intrnl_Id="300">
+<LocList>
+<Loc EndOffset="1103" SrcFileId="11" StartOffset="1095"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S13" CovItemPrefix="agent.AgentFactory.java" Intrnl_Id="301">
+<LocList>
+<Loc EndOffset="1148" SrcFileId="11" StartOffset="1107"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="50" HierarchyLvlTypeId="15" Intrnl_Id="302" Name="createAgent">
+<Header>
+<Loc EndOffset="1184" SrcFileId="11" StartOffset="1158"/>
+</Header>
+<LocList>
+<Loc EndOffset="1311" SrcFileId="11" StartOffset="1158"/>
+</LocList>
+<StmntSeq Intrnl_Id="303">
+<LocList>
+<Loc EndOffset="1290" SrcFileId="11" StartOffset="1189"/>
+<Loc EndOffset="1307" SrcFileId="11" StartOffset="1294"/>
+</LocList>
+<BasicStmnt CovItemId="S14" CovItemPrefix="agent.AgentFactory.java" Intrnl_Id="304">
+<LocList>
+<Loc EndOffset="1290" SrcFileId="11" StartOffset="1189"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S15" CovItemPrefix="agent.AgentFactory.java" Intrnl_Id="305">
+<LocList>
+<Loc EndOffset="1307" SrcFileId="11" StartOffset="1294"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="61" HierarchyLvlTypeId="16" Intrnl_Id="306" Name="Agent">
+<Header>
+<Loc EndOffset="235" SrcFileId="12" StartOffset="217"/>
+</Header>
+<LocList>
+<Loc EndOffset="2123" SrcFileId="12" StartOffset="217"/>
+</LocList>
+<StmntSeq Intrnl_Id="307">
+<LocList>
+<Loc EndOffset="361" SrcFileId="12" StartOffset="326"/>
+<Loc EndOffset="408" SrcFileId="12" StartOffset="364"/>
+<Loc EndOffset="495" SrcFileId="12" StartOffset="462"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="agent.Agent.java" Intrnl_Id="308">
+<LocList>
+<Loc EndOffset="361" SrcFileId="12" StartOffset="326"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S2" CovItemPrefix="agent.Agent.java" Intrnl_Id="309">
+<LocList>
+<Loc EndOffset="408" SrcFileId="12" StartOffset="364"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S3" CovItemPrefix="agent.Agent.java" Intrnl_Id="310">
+<LocList>
+<Loc EndOffset="495" SrcFileId="12" StartOffset="462"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<HierarchyLvl HierarchyLvlId="52" HierarchyLvlTypeId="15" Intrnl_Id="311" Name="Agent">
+<Header>
+<Loc EndOffset="677" SrcFileId="12" StartOffset="545"/>
+</Header>
+<LocList>
+<Loc EndOffset="970" SrcFileId="12" StartOffset="545"/>
+</LocList>
+<StmntSeq Intrnl_Id="312">
+<LocList>
+<Loc EndOffset="691" SrcFileId="12" StartOffset="683"/>
+<Loc EndOffset="723" SrcFileId="12" StartOffset="695"/>
+<Loc EndOffset="768" SrcFileId="12" StartOffset="727"/>
+<Loc EndOffset="829" SrcFileId="12" StartOffset="772"/>
+<Loc EndOffset="868" SrcFileId="12" StartOffset="833"/>
+<Loc EndOffset="913" SrcFileId="12" StartOffset="872"/>
+<Loc EndOffset="966" SrcFileId="12" StartOffset="917"/>
+</LocList>
+<BasicStmnt CovItemId="S4" CovItemPrefix="agent.Agent.java" Intrnl_Id="313">
+<LocList>
+<Loc EndOffset="691" SrcFileId="12" StartOffset="683"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S5" CovItemPrefix="agent.Agent.java" Intrnl_Id="314">
+<LocList>
+<Loc EndOffset="723" SrcFileId="12" StartOffset="695"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S6" CovItemPrefix="agent.Agent.java" Intrnl_Id="315">
+<LocList>
+<Loc EndOffset="768" SrcFileId="12" StartOffset="727"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S7" CovItemPrefix="agent.Agent.java" Intrnl_Id="316">
+<LocList>
+<Loc EndOffset="829" SrcFileId="12" StartOffset="772"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S8" CovItemPrefix="agent.Agent.java" Intrnl_Id="317">
+<LocList>
+<Loc EndOffset="868" SrcFileId="12" StartOffset="833"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S9" CovItemPrefix="agent.Agent.java" Intrnl_Id="318">
+<LocList>
+<Loc EndOffset="913" SrcFileId="12" StartOffset="872"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S10" CovItemPrefix="agent.Agent.java" Intrnl_Id="319">
+<LocList>
+<Loc EndOffset="966" SrcFileId="12" StartOffset="917"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="53" HierarchyLvlTypeId="15" Intrnl_Id="320" Name="setEnergy">
+<Header>
+<Loc EndOffset="1012" SrcFileId="12" StartOffset="976"/>
+</Header>
+<LocList>
+<Loc EndOffset="1043" SrcFileId="12" StartOffset="976"/>
+</LocList>
+<StmntSeq Intrnl_Id="321">
+<LocList>
+<Loc EndOffset="1039" SrcFileId="12" StartOffset="1018"/>
+</LocList>
+<BasicStmnt CovItemId="S11" CovItemPrefix="agent.Agent.java" Intrnl_Id="322">
+<LocList>
+<Loc EndOffset="1039" SrcFileId="12" StartOffset="1018"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="54" HierarchyLvlTypeId="15" Intrnl_Id="323" Name="setFitness">
+<Header>
+<Loc EndOffset="1086" SrcFileId="12" StartOffset="1048"/>
+</Header>
+<LocList>
+<Loc EndOffset="1119" SrcFileId="12" StartOffset="1048"/>
+</LocList>
+<StmntSeq Intrnl_Id="324">
+<LocList>
+<Loc EndOffset="1115" SrcFileId="12" StartOffset="1092"/>
+</LocList>
+<BasicStmnt CovItemId="S12" CovItemPrefix="agent.Agent.java" Intrnl_Id="325">
+<LocList>
+<Loc EndOffset="1115" SrcFileId="12" StartOffset="1092"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="55" HierarchyLvlTypeId="15" Intrnl_Id="326" Name="getGenotype">
+<Header>
+<Loc EndOffset="1155" SrcFileId="12" StartOffset="1126"/>
+</Header>
+<LocList>
+<Loc EndOffset="1181" SrcFileId="12" StartOffset="1126"/>
+</LocList>
+<StmntSeq Intrnl_Id="327">
+<LocList>
+<Loc EndOffset="1177" SrcFileId="12" StartOffset="1161"/>
+</LocList>
+<BasicStmnt CovItemId="S13" CovItemPrefix="agent.Agent.java" Intrnl_Id="328">
+<LocList>
+<Loc EndOffset="1177" SrcFileId="12" StartOffset="1161"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="56" HierarchyLvlTypeId="15" Intrnl_Id="329" Name="setGenotype">
+<Header>
+<Loc EndOffset="1228" SrcFileId="12" StartOffset="1186"/>
+</Header>
+<LocList>
+<Loc EndOffset="1263" SrcFileId="12" StartOffset="1186"/>
+</LocList>
+<StmntSeq Intrnl_Id="330">
+<LocList>
+<Loc EndOffset="1259" SrcFileId="12" StartOffset="1234"/>
+</LocList>
+<BasicStmnt CovItemId="S14" CovItemPrefix="agent.Agent.java" Intrnl_Id="331">
+<LocList>
+<Loc EndOffset="1259" SrcFileId="12" StartOffset="1234"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="57" HierarchyLvlTypeId="15" Intrnl_Id="332" Name="getEnergy">
+<Header>
+<Loc EndOffset="1293" SrcFileId="12" StartOffset="1268"/>
+</Header>
+<LocList>
+<Loc EndOffset="1317" SrcFileId="12" StartOffset="1268"/>
+</LocList>
+<StmntSeq Intrnl_Id="333">
+<LocList>
+<Loc EndOffset="1313" SrcFileId="12" StartOffset="1299"/>
+</LocList>
+<BasicStmnt CovItemId="S15" CovItemPrefix="agent.Agent.java" Intrnl_Id="334">
+<LocList>
+<Loc EndOffset="1313" SrcFileId="12" StartOffset="1299"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="58" HierarchyLvlTypeId="15" Intrnl_Id="335" Name="getFitness">
+<Header>
+<Loc EndOffset="1348" SrcFileId="12" StartOffset="1322"/>
+</Header>
+<LocList>
+<Loc EndOffset="1373" SrcFileId="12" StartOffset="1322"/>
+</LocList>
+<StmntSeq Intrnl_Id="336">
+<LocList>
+<Loc EndOffset="1369" SrcFileId="12" StartOffset="1354"/>
+</LocList>
+<BasicStmnt CovItemId="S16" CovItemPrefix="agent.Agent.java" Intrnl_Id="337">
+<LocList>
+<Loc EndOffset="1369" SrcFileId="12" StartOffset="1354"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="59" HierarchyLvlTypeId="15" Intrnl_Id="338" Name="fight">
+<Header>
+<Loc EndOffset="1409" SrcFileId="12" StartOffset="1378"/>
+</Header>
+<LocList>
+<Loc EndOffset="1655" SrcFileId="12" StartOffset="1378"/>
+</LocList>
+<StmntSeq Intrnl_Id="339">
+<LocList>
+<Loc EndOffset="1647" SrcFileId="12" StartOffset="1415"/>
+</LocList>
+<CondStmnt CovItemId="S17" CovItemPrefix="agent.Agent.java" Intrnl_Id="340">
+<Branch CovItemId="B1" CovItemPrefix="agent.Agent.java" Implct="false" Intrnl_Id="341">
+<Cond/>
+<LocList>
+<Loc EndOffset="1543" SrcFileId="12" StartOffset="1446"/>
+</LocList>
+<StmntSeq Intrnl_Id="342">
+<LocList>
+<Loc EndOffset="1502" SrcFileId="12" StartOffset="1457"/>
+<Loc EndOffset="1538" SrcFileId="12" StartOffset="1507"/>
+</LocList>
+<BasicStmnt CovItemId="S18" CovItemPrefix="agent.Agent.java" Intrnl_Id="343">
+<LocList>
+<Loc EndOffset="1502" SrcFileId="12" StartOffset="1457"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S19" CovItemPrefix="agent.Agent.java" Intrnl_Id="344">
+<LocList>
+<Loc EndOffset="1538" SrcFileId="12" StartOffset="1507"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B2" CovItemPrefix="agent.Agent.java" Implct="false" Intrnl_Id="345">
+<Cond>
+<Loc EndOffset="1551" SrcFileId="12" StartOffset="1547"/>
+</Cond>
+<LocList>
+<Loc EndOffset="1647" SrcFileId="12" StartOffset="1551"/>
+</LocList>
+<StmntSeq Intrnl_Id="346">
+<LocList>
+<Loc EndOffset="1606" SrcFileId="12" StartOffset="1561"/>
+<Loc EndOffset="1642" SrcFileId="12" StartOffset="1611"/>
+</LocList>
+<BasicStmnt CovItemId="S20" CovItemPrefix="agent.Agent.java" Intrnl_Id="347">
+<LocList>
+<Loc EndOffset="1606" SrcFileId="12" StartOffset="1561"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S21" CovItemPrefix="agent.Agent.java" Intrnl_Id="348">
+<LocList>
+<Loc EndOffset="1642" SrcFileId="12" StartOffset="1611"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="1417" SrcFileId="12" StartOffset="1415"/>
+<LocList>
+<Loc EndOffset="1647" SrcFileId="12" StartOffset="1415"/>
+</LocList>
+</CondStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="60" HierarchyLvlTypeId="15" Intrnl_Id="349" Name="hybridize">
+<Header>
+<Loc EndOffset="1729" SrcFileId="12" StartOffset="1663"/>
+</Header>
+<LocList>
+<Loc EndOffset="2118" SrcFileId="12" StartOffset="1663"/>
+</LocList>
+<StmntSeq Intrnl_Id="350">
+<LocList>
+<Loc EndOffset="1816" SrcFileId="12" StartOffset="1735"/>
+<Loc EndOffset="1937" SrcFileId="12" StartOffset="1820"/>
+<Loc EndOffset="1982" SrcFileId="12" StartOffset="1945"/>
+<Loc EndOffset="2010" SrcFileId="12" StartOffset="1986"/>
+<Loc EndOffset="2048" SrcFileId="12" StartOffset="2018"/>
+<Loc EndOffset="2096" SrcFileId="12" StartOffset="2052"/>
+<Loc EndOffset="2114" SrcFileId="12" StartOffset="2100"/>
+</LocList>
+<BasicStmnt CovItemId="S22" CovItemPrefix="agent.Agent.java" Intrnl_Id="351">
+<LocList>
+<Loc EndOffset="1816" SrcFileId="12" StartOffset="1735"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S23" CovItemPrefix="agent.Agent.java" Intrnl_Id="352">
+<LocList>
+<Loc EndOffset="1937" SrcFileId="12" StartOffset="1820"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S24" CovItemPrefix="agent.Agent.java" Intrnl_Id="353">
+<LocList>
+<Loc EndOffset="1982" SrcFileId="12" StartOffset="1945"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S25" CovItemPrefix="agent.Agent.java" Intrnl_Id="354">
+<LocList>
+<Loc EndOffset="2010" SrcFileId="12" StartOffset="1986"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S26" CovItemPrefix="agent.Agent.java" Intrnl_Id="355">
+<LocList>
+<Loc EndOffset="2048" SrcFileId="12" StartOffset="2018"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S27" CovItemPrefix="agent.Agent.java" Intrnl_Id="356">
+<LocList>
+<Loc EndOffset="2096" SrcFileId="12" StartOffset="2052"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S28" CovItemPrefix="agent.Agent.java" Intrnl_Id="357">
+<LocList>
+<Loc EndOffset="2114" SrcFileId="12" StartOffset="2100"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+</HierarchyLvl>
+</HierarchyLvl>
+</MASTRoot>
+</TestSessionContainer>
