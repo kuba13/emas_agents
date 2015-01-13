@@ -33,8 +33,8 @@ public class Main {
 		}
 		
 		Random r = new Random();
-		
-		while(list.size()>0){
+		int t=0; 
+		while(t<10){
 			
 			int size = list.size();
 			System.out.println("#############################################################");
@@ -74,9 +74,9 @@ public class Main {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			t++;	
 		}
-		
+	
 	}
 
 }

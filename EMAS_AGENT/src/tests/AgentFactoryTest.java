@@ -25,7 +25,7 @@ public class AgentFactoryTest {
 	public void createAgent() throws WrongGenotypeException {
 		AgentFactory factory = new AgentFactory(10, 0.1, 100, proxy);
 		Agent a = factory.createAgent();
-		assert(a.getEnergy()==100);
+		assertEquals(a.getEnergy(),100,0.0);
 	}
 
 }
