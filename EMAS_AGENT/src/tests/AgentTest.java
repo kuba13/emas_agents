@@ -50,7 +50,7 @@ public class AgentTest {
 		assertEquals(a1.getEnergy(),50,0.0);
 		assertEquals(a2.getEnergy(),50,0.0);
 		assertEquals(a3.getEnergy(),100,0.0);
-	//	assertEquals(a3.getFitness(),(a1.getFitness()+a2.getFitness())/2,0.0);
+		
 	}
 	
 	

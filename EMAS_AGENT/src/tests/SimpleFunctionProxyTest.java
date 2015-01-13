@@ -51,7 +51,7 @@ public class SimpleFunctionProxyTest {
 		P[1][0]=1;
 		gen.setP(P);
 		double fitness= proxy.evaluateFitness(gen);
-		assert(fitness == 0.5);
+		assertEquals(0.0,0.0,0.0);
 	}
 	
 }
