@@ -1,5 +1,6 @@
 package genotype;
 
 public abstract class Genotype {
-	public abstract Genotype hybridize(Genotype genotype2, double randomnessFactor);
+	public abstract Genotype hybridize(Genotype genotype2,
+			double randomnessFactor);
 }

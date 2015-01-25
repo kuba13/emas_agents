@@ -4,32 +4,33 @@ import java.util.Random;
 
 import function.IFunction;
 
-public class FunctionGenotype extends Genotype{
-	
-	private int n; //dimensions
-	private double[][] P; //simplex vertices
-	
+public class FunctionGenotype extends Genotype {
+
+	private int n; // dimensions
+	private double[][] P; // simplex vertices
+
 	private IFunction f;
-	
+
 	private double minDomain[];
 	private double maxDomain[];
-	
-	public FunctionGenotype(IFunction f){
-		this.f=f;
-		this.n=f.getDimensions();
-		P=new double[n+1][n];
-		minDomain=f.getLowerDomainBound();
-		maxDomain=f.getUpperDomainBound();
-		
+
+	public FunctionGenotype(IFunction f) {
+		this.f = f;
+		this.n = f.getDimensions();
+		P = new double[n + 1][n];
+		minDomain = f.getLowerDomainBound();
+		maxDomain = f.getUpperDomainBound();
+
 		Random r = new Random();
-    	for(int i=0;i<n+1;i++){
-    		for(int j=0;j<n;j++){
-    			
-    			P[i][j] = minDomain[j] + (maxDomain[j] - minDomain[j]) * r.nextDouble();
-    		}
-    		
-    	}	
-		
+		for (int i = 0; i < n + 1; i++) {
+			for (int j = 0; j < n; j++) {
+
+				P[i][j] = minDomain[j] + (maxDomain[j] - minDomain[j])
+						* r.nextDouble();
+			}
+
+		}
+
 	}
 
 	public int getN() {
@@ -64,34 +65,32 @@ public class FunctionGenotype extends Genotype{
 		this.maxDomain = maxDomain;
 	}
 
-
 	public Genotype hybridize(Genotype gen2, double randomnessFactor) {
-		
+
 		FunctionGenotype genotype2 = (FunctionGenotype) gen2;
 		FunctionGenotype gen3 = new FunctionGenotype(f);
-		double[][] P3=new double[n+1][n];
-		
-		for(int i=0; i<n+1;i++){
-			for(int j=0;j<n;j++){
-				P3[i][j]=(P[i][j]+genotype2.getP()[i][j])/2;
+		double[][] P3 = new double[n + 1][n];
+
+		for (int i = 0; i < n + 1; i++) {
+			for (int j = 0; j < n; j++) {
+				P3[i][j] = (P[i][j] + genotype2.getP()[i][j]) / 2;
 			}
 		}
-		
-		int k=(int) (n*randomnessFactor);
-		
+
+		int k = (int) (n * randomnessFactor);
+
 		Random r = new Random();
-		for(int l=0; l<k;l++){
-			int t= r.nextInt(n);
-			for(int j=0;j<n;j++){
-    			
-    			P[t][j] = minDomain[j] + (maxDomain[j] - minDomain[j]) * r.nextDouble();
-    		}
-			
+		for (int l = 0; l < k; l++) {
+			int t = r.nextInt(n);
+			for (int j = 0; j < n; j++) {
+
+				P[t][j] = minDomain[j] + (maxDomain[j] - minDomain[j])
+						* r.nextDouble();
+			}
+
 		}
 		gen3.setP(P3);
 		return gen3;
 	}
 
-	
-	
 }
